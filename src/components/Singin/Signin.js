@@ -5,6 +5,7 @@ import "./Signin.css";
 import API_URL from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
 import { RoleContext } from "../../services/role.context";
+import { ThemeContext } from "../../services/theme.context";
 
 const Signin = () => {
   // const { updateUserRole, setDecodedToken } = useUser(); // Asegúrate de tener una función setDecodedToken en el contexto
@@ -107,6 +108,7 @@ const Signin = () => {
     }
   };
 
+  const { theme } = useContext(ThemeContext);
   // navigate("/dashboard");
 
   return (
