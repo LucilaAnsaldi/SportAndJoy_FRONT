@@ -110,7 +110,11 @@ const Signin = () => {
   // navigate("/dashboard");
 
   return (
-    <div className="signin-container">
+    <div
+      className={
+        theme === "dark" ? "signin-container-dark" : "signin-container"
+      }
+    >
       <h2>Ingresá a tu cuenta</h2>
       <div className="input-container">
         <label className="label">Mail</label>
@@ -147,6 +151,7 @@ const Signin = () => {
       <button className="signin-button" type="button" onClick={signInHandler}>
         Ingresar
       </button>
+
       <p onClick={buttonNavigateSignin}>¿No tenés una cuenta? ¡Registrate!</p>
     </div>
   );

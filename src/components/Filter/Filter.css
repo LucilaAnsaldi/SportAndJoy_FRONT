@@ -1,7 +1,7 @@
 .filter-menu {
   border-bottom-right-radius: 10px;
   padding: 20px;
-  width: 18%;
+  width: 15%;
   height: 10vh;
   display: inline-table;
   background-color: #94c3dd;
@@ -34,8 +34,8 @@ input[type="number"] {
   border: 5px solid darkcyan;
   border-radius: 30px;
   padding: 5%;
-  width: 100%;
-  margin-left: 0%;
+  width: 80%;
+  margin-left: 10%;
   margin-right: 10%;
   margin-top: 10px;
   cursor: pointer;

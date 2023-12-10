@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { RoleContext } from "../../services/role.context";
 import API_URL from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
+import { ThemeContext } from "../../services/theme.context";
 
 const FieldDetail = (props) => {
   const { name, location, image, description, sport, lockerRoom, bar, price } =
@@ -158,11 +159,18 @@ const FieldDetail = (props) => {
     sportName = "Tenis";
   }
 
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <Header />
 
-      <div className="field-detail field-card">
+      <div
+        className={
+          theme === "dark"
+            ? "field-detail-dark field-card"
+            : "field-detail field-card"
+        }
+      >
         <img src={image} alt={name} className="field-image" />
         <div className="field-info">
           <h2> {editedName}</h2>

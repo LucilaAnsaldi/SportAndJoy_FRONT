@@ -7,6 +7,7 @@ import { RoleContext } from "../../services/role.context";
 import NotFound from "../NotFound/NotFound";
 import API_URL from "../../constants/api";
 import { Button } from "react-bootstrap";
+import { ThemeContext } from "../../services/theme.context";
 
 const AdminView = () => {
   const { role } = useContext(RoleContext);
@@ -72,23 +73,35 @@ const AdminView = () => {
       });
   };
 
+  const { theme } = useContext(ThemeContext);
+
   if (role === "ADMIN") {
     return (
       <>
         <Header />
-        <ToggleTheme />
-
         <div className="body">
-          <button className="users-button" onClick={buttonNavigateUsers}>
+          <button
+            className={theme === "dark" ? "users-button-dark" : "users-button"}
+            onClick={buttonNavigateUsers}
+          >
             Usuarios Activos
           </button>
           <button
-            className="reservations-button"
+            className={
+              theme === "dark"
+                ? "reservations-button-dark"
+                : "reservations-button"
+            }
             onClick={buttonNavigateReservations}
           >
             Reservas
           </button>
-          <button className="allFields-button" onClick={buttonNavigateFields}>
+          <button
+            className={
+              theme === "dark" ? "allFields-button-dark" : "allFields-button"
+            }
+            onClick={buttonNavigateFields}
+          >
             Canchas activas
           </button>
         </div>
