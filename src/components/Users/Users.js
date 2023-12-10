@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UsersCard from "../UsersCard/UsersCard";
 import { Header } from "../Header/Header";
 import "./Users.css";
 import { Search } from "../Search/Search";
 import API_URL from "../../constants/api";
+import { ThemeContext } from "../../services/theme.context";
 
 //CON FORMULARIO!
 
@@ -109,14 +110,15 @@ const Users = () => {
       });
   }, []);
 
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <Header />
+      <h1>Usuarios activos</h1>
+      <Search />
       <button id="add-user-button" onClick={handleAddUserClick}>
         Agregar Usuario
       </button>
-      <h1>Usuarios activos</h1>
-      <Search />
       <div className="container">
         {users.map((user) => (
           <UsersCard
@@ -129,7 +131,9 @@ const Users = () => {
 
       {/* Popup para agregar usuario */}
       {showAddUserPopup && (
-        <div className="add-user-popup">
+        <div
+          className={theme == "dark" ? "add-user-popup-dark" : "add-user-popup"}
+        >
           <form onSubmit={handleAddUserSubmit}>
             {/* Campos del formulario para el nuevo usuario */}
             <label>

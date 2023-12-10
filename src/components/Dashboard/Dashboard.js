@@ -66,7 +66,6 @@ const Dashboard = () => {
   };
 
   ///////GET ALL FIELDS para player y para owner
-
   const endpoint = role === "PLAYER" || role === "ADMIN" ? "/api/Field/getall" : "/api/Field/get/myfields"; 
 
   useEffect(() => {
@@ -134,20 +133,28 @@ const Dashboard = () => {
   return (
     <>
       <Header />
-      <ToggleTheme />
-      <div className="dashboard-container">
-        <div className="top-bar">
-          {role !== "OWNER" && role !== "ADMIN" && (
-            <Filter onApplyFilters={handleApplyFilters} />
+      <div
+        className={`dashboard-container ${
+          role === "ADMIN" || role === "OWNER" ? "admin-owner" : "player"
+        }`}
+      >
+        {role !== "ADMIN" && role !== "OWNER" && (
+          <Filter onApplyFilters={handleApplyFilters} />
+        )}
+        <div
+          className={`dashboard-right ${
+            role === "ADMIN" || role === "OWNER" ? "admin-owner" : "player"
+          }`}
+        >
+          {(role === "ADMIN" || role === "OWNER") && (
+            <>
+              <Search />
+              <button id="add-field-button" onClick={handleAddFieldClick}>
+                Agregar Cancha
+              </button>
+            </>
           )}
-        </div>
-        <div className="dashboard-right">
-          {role === "ADMIN" && (
-            <button id="add-field-button" onClick={handleAddFieldClick}>
-              Agregar Cancha
-            </button>
-          )}
-          <Search />
+          {role !== "ADMIN" && role !== "OWNER" && <Search />}
           <div className="flex-fields">
             {fields.map((field) => (
               <FieldCard
@@ -158,11 +165,14 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
-        {/* Popup para agregar canhca */}
+        {/* Popup para agregar cancha */}
         {showAddFieldPopup && (
-          <div className="add-field-popup">
+          <div
+            className={
+              theme === "dark" ? "add-field-popup-dark" : "add-field-popup"
+            }
+          >
             <form onSubmit={handleAddFieldSubmit}>
-              {/* Campos del formulario para el nuevo cancha */}
               <label>
                 Imagen:
                 <input

@@ -1,20 +1,39 @@
-.dashboard-container {
-  display: flex;
-  flex-direction: row;
+.dashboard-right.admin-owner {
+  /* Estilos específicos para ADMIN y OWNER */
 }
-.dashboard-right {
-}
-.top-bar {
+
+/* Estilos específicos para roles diferentes de ADMIN y OWNER */
+.dashboard-container.player {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+}
+
+.dashboard-right.player {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .flex-fields {
+}
+.dashboard-right.admin-owner .flex-fields {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
+
+/* Estilos para el contenedor de flex-fields en roles diferentes de ADMIN y OWNER */
+.dashboard-right.player .flex-fields {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   width: 100%;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
 }
 
 .add-field-popup {
@@ -23,16 +42,26 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 10%;
-  height: 20rem;
-  width: 10rem;
+  padding: 5%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-field-popup-dark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #113f67;
+  padding: 5%;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 form {
   display: flex;
-  flex-direction: column;
+  flex-direction: grid;
+  align-items: center;
 }
 
 label {
@@ -50,8 +79,11 @@ select {
 #add-field-button {
   background-color: #4caf50;
   color: white;
-  padding: 10px 15px;
-  border: none;
+  padding: 15px 20px;
+  border-radius: 5px;
+  border: 4px solid darkgreen;
+  margin-left: 45%;
+  margin-right: 40%;
   border-radius: 5px;
   cursor: pointer;
 }
