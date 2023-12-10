@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ToggleTheme from "../toggleTheme/ToggleTheme";
 import API_URL from "../../constants/api";
 import { RoleContext } from "../../services/role.context";
+import { ThemeContextProvider } from "../../services/theme.context";
 
 const Dashboard = () => {
   const [fields, setFields] = useState([]);
@@ -66,7 +67,10 @@ const Dashboard = () => {
   };
 
   ///////GET ALL FIELDS para player y para owner
-  const endpoint = role === "PLAYER" || role === "ADMIN" ? "/api/Field/getall" : "/api/Field/get/myfields"; 
+  const endpoint =
+    role === "PLAYER" || role === "ADMIN"
+      ? "/api/Field/getall"
+      : "/api/Field/get/myfields";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -129,7 +133,7 @@ const Dashboard = () => {
     console.log("Canchas filtradas:", filteredFields);
     setFields(filteredFields);
   };
-
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <Header />
