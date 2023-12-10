@@ -67,7 +67,7 @@ const Dashboard = () => {
 
   ///////GET ALL FIELDS para player y para owner
 
-  const endpoint = role === "PLAYER" ? "/api/Field/getall" : "/api/Field/get/myfields"; 
+  const endpoint = role === "PLAYER" || role === "ADMIN" ? "/api/Field/getall" : "/api/Field/get/myfields"; 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
