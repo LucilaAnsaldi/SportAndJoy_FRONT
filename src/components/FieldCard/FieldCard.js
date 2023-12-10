@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./FieldCard.css";
 import { ThemeContext } from "../../services/theme.context";
 

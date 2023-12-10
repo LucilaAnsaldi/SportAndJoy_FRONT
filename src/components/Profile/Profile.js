@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import API_URL from "../../constants/api";
 import avatarImage from "../../assets/images/default_avatar.jpg";
 import { ThemeContext } from "../../services/theme.context";
+import ToggleTheme from "../toggleTheme/ToggleTheme";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);

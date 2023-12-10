@@ -1,5 +1,7 @@
 import React from "react";
 import "./Search.css";
+import { useContext } from "react";
+import { ThemeContext } from "../../services/theme.context";
 
 export const Search = () => {
   const { theme } = useContext(ThemeContext);

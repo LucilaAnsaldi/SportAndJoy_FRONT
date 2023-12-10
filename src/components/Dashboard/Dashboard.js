@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ToggleTheme from "../toggleTheme/ToggleTheme";
 import API_URL from "../../constants/api";
 import { RoleContext } from "../../services/role.context";
-import { ThemeContextProvider } from "../../services/theme.context";
+import { ThemeContext } from "../../services/theme.context";
 
 const Dashboard = () => {
   const [fields, setFields] = useState([]);
