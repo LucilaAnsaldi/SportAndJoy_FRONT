@@ -16,17 +16,19 @@ const FieldDetail = (props) => {
   const { role } = useContext(RoleContext);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState(name);
-  const [editedLocation, setEditedLocation] = useState(location);
-  const [editedDescription, setEditedDescription] = useState(description);
-  const [editedSport, setEditedSport] = useState(sport);
-  const [editedLockerRoom, setEditedLockerRoom] = useState(lockerRoom);
-  const [editedBar, setEditedBar] = useState(bar);
-  const [editedPrice, setEditedPrice] = useState(price);
+  const [editedName, setEditedName] = useState("");
+  const [editedLocation, setEditedLocation] = useState("");
+  const [editedImage, setEditedImage] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editedSport, setEditedSport] = useState("");
+  const [editedLockerRoom, setEditedLockerRoom] = useState("");
+  const [editedBar, setEditedBar] = useState("");
+  const [editedPrice, setEditedPrice] = useState("");
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [field, setField] = useState({});
+  const [fieldData, setField] = useState({});
+
 
   const handleReserveClick = () => {
     setShowConfirmation(true);
@@ -65,8 +67,7 @@ const FieldDetail = (props) => {
     setShowDeleteConfirmation(false);
   };
 
-  ///////CREAR RESERVA
-
+ 
   const handleConfirmReservation = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -100,43 +101,84 @@ const FieldDetail = (props) => {
     setShowConfirmation(false);
   };
 
+
+  // EDITAR
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
+
+  // Editar cancha PUT
+
   const handleSaveClick = () => {
-    setIsEditing(false);
+    const token = localStorage.getItem("token");
+    fetch(`${API_URL}/api/Field/${id}/edit`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id: id,
+        name: editedName,
+        location: editedLocation,
+        image: editedImage,
+        description: editedDescription,
+        lockerRoom: editedLockerRoom,
+        bar: editedBar,
+        price: editedPrice,
+        sport: editedSport
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(
+              `HTTP error! Status: ${response.status}, Message: ${error}`
+            );
+          });
+        }
+        if (response.status === 204) {
+          console.log("Edición exitosa");
+          setIsEditing(false);
+        }
+        return response.json();
+      })
+      .then((updatedFieldData) => {
+        setIsEditing(false);
+        setField(updatedFieldData);
+      })
+      .catch((error) => {
+        console.error("Error updating field data:", error.message);
+      });
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case "name":
-        setEditedName(value);
-        break;
-      case "location":
-        setEditedLocation(value);
-        break;
-      case "description":
-        setEditedDescription(value);
-        break;
-      case "sport":
-        setEditedSport(value);
-        break;
-      case "lockerRoom":
-        setEditedLockerRoom(value);
-        break;
-      case "bar":
-        setEditedBar(value);
-        break;
-      case "price":
-        setEditedPrice(value);
-        break;
-      default:
-        break;
-    }
+    if (e.target.name === "name") {
+      setEditedName(e.target.value);
+    } else if (e.target.name === "location") {
+      setEditedLocation(e.target.value);
+    } else if (e.target.name === "image") {
+      setEditedImage(e.target.value);
+    } else if (e.target.name === "description") {
+      setEditedDescription(e.target.value);
+    } else if (e.target.name === "sport") {
+      setEditedSport(e.target.value);
+    } else if (e.target.name === "lockerRoom") {
+      setEditedLockerRoom(e.target.value);
+    } else if (e.target.name === "bar") {
+      setEditedBar(e.target.value);
+    } else if (e.target.name === "price") {
+      setEditedPrice(e.target.value); }
   };
 
-  ////// GET 1 FIELD
+  const buttonCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+
+  // Traer Cancha GET
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -148,48 +190,28 @@ const FieldDetail = (props) => {
     })
       .then((response) => response.json())
       .then((fieldData) => {
+        console.log("Datos de la cancha:", fieldData);
+        setEditedName(fieldData.name);
+        setEditedLocation(fieldData.location);
+        setEditedImage(fieldData.image);
+        setEditedDescription(fieldData.description);
+        setEditedSport(fieldData.sport);
+        setEditedLockerRoom(fieldData.lockerRoom);
+        setEditedBar(fieldData.bar);
+        setEditedPrice(fieldData.price);
         setField(fieldData);
-        console.log(fieldData);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  // DELETE USER
-
-  // const handleDeleteUser = async (userId) => {
-  //   try {
-  //     const token = localStorage.getItem("token");
-
-  //     const response = await fetch(
-  //       `${API_URL}/api/User/${userId}/delete-admin`,
-  //       {
-  //         method: "DELETE",
-  //         headers: {
-  //           Accept: "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const updatedUsers = users.filter((user) => user.id !== userId);
-  //       setUsers(updatedUsers);
-  //     } else {
-  //       console.log("Error al eliminar usuario:", await response.text());
-  //     }
-  //   } catch (error) {
-  //     console.error("Error en la solicitud:", error);
-  //   }
-  // };
-
   let sportName = "";
-  if (field.sport === 0) {
+  if (fieldData.sport === 0) {
     sportName = "Fútbol";
-  } else if (field.sport === 1) {
+  } else if (fieldData.sport === 1) {
     sportName = "Vóley";
-  } else if (field.sport === 2) {
+  } else if (fieldData.sport === 2) {
     sportName = "Tenis";
   }
 
@@ -210,6 +232,13 @@ const FieldDetail = (props) => {
           <h2> {editedName}</h2>
           {isEditing ? (
             <div>
+              <label>Cambia tu foto de perfil:</label>
+              <input
+                type="text"
+                name="image"
+                value={editedImage}
+                onChange={handleInputChange}
+              />
               <label>Ubicación:</label>
               <input
                 type="text"
@@ -253,37 +282,34 @@ const FieldDetail = (props) => {
                 onChange={handleInputChange}
               />
               <button onClick={handleSaveClick}>Guardar</button>
+              <button onClick={buttonCancelEdit}>Cancelar</button>
             </div>
           ) : (
             <div>
-              <img src={field.image} alt={field.name} className="field-image" />
-              <h2>{field.name}</h2>
+              <img src={editedImage} alt={editedName} className="field-image" />
               <p>
-                <strong>Ubicación: {field.location}</strong> {editedLocation}
+                <strong>Ubicación: </strong> {editedLocation}
               </p>
               <p>
-                <strong>Descripción: {field.description}</strong>{" "}
-                {editedDescription}
+                <strong>Descripción: </strong> {editedDescription}
               </p>
               <p>
-                <strong>Deporte: {sportName}</strong> {editedSport}
+                <strong>Deporte: </strong> {sportName}
               </p>
               <p>
-                <strong>Vestuarios: {field.lockerRoom}</strong>{" "}
-                {editedLockerRoom ? "Sí" : "No"}
+                <strong>Vestuarios: </strong> {editedLockerRoom ? "Sí" : "No"}
               </p>
               <p>
-                <strong>Bar: {field.bar}</strong> {editedBar ? "Sí" : "No"}
+                <strong>Bar: </strong> {editedBar ? "Sí" : "No"}
               </p>
               <p>
-                <strong>Precio: $ {field.price}</strong> {editedPrice}
+                <strong>Precio: </strong> $ {editedPrice}
               </p>
-              {role === "OWNER" ||
-                (role === "ADMIN" && (
+              { (role === "OWNER" || role === "ADMIN") && (
                   <button className="edit-button" onClick={handleEditClick}>
                     Editar
                   </button>
-                ))}
+                )}
               {role === "ADMIN" && (
                 <button className="delete-button" onClick={handleDeleteField}>
                   Eliminar
