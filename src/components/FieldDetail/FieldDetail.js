@@ -25,17 +25,49 @@ const FieldDetail = (props) => {
   const [editedBar, setEditedBar] = useState("");
   const [editedPrice, setEditedPrice] = useState("");
 
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [fieldData, setField] = useState({});
 
-  // RESERVA
 
   const handleReserveClick = () => {
     setShowConfirmation(true);
   };
 
-  // Crear reserva POST
+  const handleDeleteField = () => {
+    setShowDeleteConfirmation(true);
+  };
 
+  const handleConfirmDeleteField = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`${API_URL}/api/Field/${id}/delete-admin`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Manejar la eliminación exitosa según sea necesario
+        console.log("Campo eliminado exitosamente");
+        // Redirigir a la página principal u otro lugar
+        navigate("/dashboard");
+      } else {
+        console.error("Error al eliminar el campo:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
+
+  const handleCancelDeleteField = () => {
+    setShowDeleteConfirmation(false);
+  };
+
+ 
   const handleConfirmReservation = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -278,10 +310,17 @@ const FieldDetail = (props) => {
                     Editar
                   </button>
                 )}
-              { (role === "OWNER" || role === "ADMIN") && (
-                <button className="delete-button" onClick={handleEditClick}>
+              {role === "ADMIN" && (
+                <button className="delete-button" onClick={handleDeleteField}>
                   Eliminar
                 </button>
+              )}
+              {showDeleteConfirmation && (
+                <div className={theme === "dark" ? "popup-dark" : "popup"}>
+                  <p>¿Seguro que quieres eliminar?</p>
+                  <button onClick={handleConfirmDeleteField}>Sí</button>
+                  <button onClick={handleCancelDeleteField}>No</button>
+                </div>
               )}
               {role === "PLAYER" && (
                 <button className="reserve-button" onClick={handleReserveClick}>
@@ -289,7 +328,7 @@ const FieldDetail = (props) => {
                 </button>
               )}
               {showConfirmation && (
-                <div className="popup">
+                <div className={theme === "dark" ? "popup-dark" : "popup"}>
                   <p>¿Seguro que desea reservar?</p>
                   <button onClick={handleConfirmReservation}>Sí</button>
                   <button onClick={handleCancelReservation}>No</button>
