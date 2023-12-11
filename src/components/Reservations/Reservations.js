@@ -6,6 +6,7 @@ import { Search } from "../Search/Search";
 import { RoleContext } from "../../services/role.context";
 import API_URL from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const Reservations = () => {
   const { role } = useContext(RoleContext);
@@ -14,6 +15,9 @@ const Reservations = () => {
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState([]); // Nuevo estado
   const [fields, setFields] = useState([]);
+  const [playerUsers, setPlayerUsers] = useState([]);
+
+  const navigate = useNavigate();
 
   const [newReservation, setNewReservation] = useState({
     date: new Date(),
@@ -21,20 +25,24 @@ const Reservations = () => {
     userId: 0,
   });
 
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/User/getall`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${API_URL}/api/User/getall`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((userData) => {
+        const playerUsersFiltered = userData.filter((user) => user.role === 2);
+        setPlayerUsers(playerUsersFiltered);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      const data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
+  }, []);
 
   const fetchFields = async () => {
     try {
@@ -52,7 +60,6 @@ const Reservations = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
     fetchFields();
   }, []);
 
@@ -149,6 +156,7 @@ const Reservations = () => {
 
       if (response.ok) {
         console.log("Reserva creada exitosamente");
+        navigate("/reservations"); // Reemplaza "/ruta-de-tu-pagina" con la ruta de tu página actual
       } else {
         console.error("Error al crear la reserva:", await response.text());
       }
@@ -189,7 +197,7 @@ const Reservations = () => {
                 onChange={(e) => setSelectedUserId(e.target.value)}
               >
                 <option value="">Seleccionar Usuario</option>
-                {users.map((user) => (
+                {playerUsers.map((user) => (
                   <option key={user.id} value={user.id}>
                     {user.id} - {user.name}{" "}
                     {/* Ajusta según la estructura de tus datos de usuario */}
