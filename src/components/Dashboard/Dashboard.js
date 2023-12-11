@@ -15,26 +15,36 @@ const Dashboard = () => {
   const [allFields, setAllFields] = useState([]);
   const [selectedfield, setSelectedfield] = useState(null);
   const { role } = useContext(RoleContext);
+  const { theme } = useContext(ThemeContext);
   const [showAddFieldPopup, setShowAddFieldPopup] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
+  const [ownerUsers, setOwnerUsers] = useState([]);
   const [newField, setNewField] = useState({
     image: null,
     name: "",
     location: "",
     description: "",
     sport: "",
-    lockerRoom: "",
-    bar: "",
-    price: "",
+    lockerRoom: false,
+    bar: false,
+    price: 0,
   });
 
   const handleAddFieldClick = () => {
     setShowAddFieldPopup(true);
+
   };
 
   const handleAddFieldChange = (e) => {
-    const { name, value } = e.target;
-    setNewField((prevField) => ({ ...prevField, [name]: value }));
+    const { name, value, type, checked } = e.target;
+
+    // Para manejar checkboxes correctamente
+  const fieldValue = type === 'checkbox' ? checked : value;
+
+  setNewField((prevField) => ({
+    ...prevField,
+    [name]: type === 'checkbox' ? checked : fieldValue,
+  }));
   };
 
   //POST FIELD 
@@ -69,8 +79,8 @@ const Dashboard = () => {
           Location: newField.location,
           Image: newField.image,
           Description: newField.description,
-          LockerRoom: newField.lockerRoom ? 1 : 0, // Convertir a número
-          Bar: newField.bar ? 1 : 0, // Convertir a número
+          LockerRoom: newField.lockerRoom, // Convertir a número
+          Bar: newField.bar, // Convertir a número
           Price: newField.price,
           Sport: parseInt(newField.sport), // Asegúrate de que el valor sea un entero
         }),
@@ -90,6 +100,27 @@ const Dashboard = () => {
     console.log(newField.bar)
     console.log(newField.lockerRoom) //no lee esto
   };
+
+//TRAE ID DE OWNERS
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+  
+    fetch(`${API_URL}/api/User/getall`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((userData) => {
+        const ownerUsersFiltered = userData.filter((user) => user.role === 1);
+        setOwnerUsers(ownerUsersFiltered);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  
   
   
 
@@ -160,7 +191,8 @@ const Dashboard = () => {
     console.log("Canchas filtradas:", filteredFields);
     setFields(filteredFields);
   };
-  const { theme } = useContext(ThemeContext);
+
+
   return (
     <>
       <Header />
@@ -217,7 +249,7 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="name"
-                  value={newField.name}
+                  // value={newField.name}
                   onChange={handleAddFieldChange}
                 />
               </label>
@@ -227,7 +259,7 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="location"
-                  value={newField.location}
+                  // value={newField.location}
                   onChange={handleAddFieldChange}
                 />
               </label>
@@ -236,28 +268,31 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="description"
-                  value={newField.description}
+                  // value={newField.description}
                   onChange={handleAddFieldChange}
                 />
               </label>
               <label>
-                Deporte:
-                <select
-  name="sport"
-  value={newField.sport}
-  onChange={handleAddFieldChange}
->
-  <option value="0">Fútbol</option>
-  <option value="1">Vóley</option>
-  <option value="2">Tenis</option>
-</select>
-              </label>
+  Deporte:
+  <select
+    name="sport"
+    value={newField.sport}
+    onChange={handleAddFieldChange}
+  >
+    <option value="" disabled hidden>
+      Seleccione un deporte
+    </option>
+    <option value="0">Fútbol</option>
+    <option value="1">Vóley</option>
+    <option value="2">Tenis</option>
+  </select>
+</label>
               <label>
                 Vestuarios:
                 <input
                   type="checkbox"
                   name="lockerRoom"
-                  value={newField.lockerRoom}
+                  // value={newField.lockerRoom}
                   onChange={handleAddFieldChange}
                 />
               </label>
@@ -266,7 +301,7 @@ const Dashboard = () => {
                 <input
                   type="checkbox"
                   name="bar"
-                  value={newField.bar}
+                  // value={newField.bar}
                   onChange={handleAddFieldChange}
                 />
               </label>
@@ -275,18 +310,23 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="price"
-                  value={newField.price}
+                  // value={newField.price}
                   onChange={handleAddFieldChange}
                 />
               </label>
               <label>
-  ID de Usuario:
-  <input
-    type="text"
+              ID de Usuario:
+  <select
     name="userId"
-    value={selectedUserId}
+    // value={selectedUserId}
     onChange={(e) => setSelectedUserId(e.target.value)}
-  />
+  >
+    {ownerUsers.map((user) => (
+      <option key={user.id} value={user.id}>
+        {user.id}
+      </option>
+    ))}
+  </select>
 </label>
               <button type="submit">Agregar</button>
             </form>
