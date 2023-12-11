@@ -75,46 +75,127 @@ const AdminView = () => {
 
   const { theme } = useContext(ThemeContext);
 
+  function handleDownloadPdf3() {
+    const month = document.getElementById("month").value;
+    const year = document.getElementById("year").value;
+
+    fetch(
+      API_URL + "/api/Reports/reservations-in-month/" + month + "/" + year,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => response.blob())
+      .then((blob) => {
+        console.log("entro");
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `InformeReservas${month}-${year}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) =>
+        console.error("Error al realizar la solicitud:", error)
+      );
+  }
+
   if (role === "ADMIN") {
     return (
       <>
         <Header />
-        <div className="body">
-          <button
-            className={theme === "dark" ? "users-button-dark" : "users-button"}
-            onClick={buttonNavigateUsers}
-          >
-            Usuarios Activos
-          </button>
-          <button
-            className={
-              theme === "dark"
-                ? "reservations-button-dark"
-                : "reservations-button"
-            }
-            onClick={buttonNavigateReservations}
-          >
-            Reservas
-          </button>
-          <button
-            className={
-              theme === "dark" ? "allFields-button-dark" : "allFields-button"
-            }
-            onClick={buttonNavigateFields}
-          >
-            Canchas activas
-          </button>
+        <div className={theme === "dark" ? "body-dark" : "x"}>
+          <div>
+            <button
+              className={
+                theme === "dark" ? "users-button-dark" : "users-button"
+              }
+              onClick={buttonNavigateUsers}
+            >
+              Usuarios Activos
+            </button>
+            <button
+              className={
+                theme === "dark"
+                  ? "reservations-button-dark"
+                  : "reservations-button"
+              }
+              onClick={buttonNavigateReservations}
+            >
+              Reservas
+            </button>
+            <button
+              className={
+                theme === "dark" ? "allFields-button-dark" : "allFields-button"
+              }
+              onClick={buttonNavigateFields}
+            >
+              Canchas activas
+            </button>
+          </div>
+          <section className={theme === "dark" ? "section-dark" : "section"}>
+            <h1 className={theme === "dark" ? "textos-dark" : "textos"}>
+              Informes
+            </h1>
+            <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+              Jugadores que hicieron al menos una reserva:
+            </h3>
+            <button
+              className={theme === "dark" ? "pdf-dark" : "pdf"}
+              onClick={handleDownloadPdf1}
+            >
+              descargar pdf
+            </button>
+            <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+              Dueños que tienen al menos una cancha:
+            </h3>
+            <button
+              className={theme === "dark" ? "pdf-dark" : "pdf"}
+              onClick={handleDownloadPdf2}
+            >
+              descargar pdf
+            </button>
+            <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+              Todas las reservas que se hicieron en un período:
+            </h3>
+            <form id="reportForm" onSubmit={handleDownloadPdf3}>
+              <label for="month">Mes:</label>
+              <select id="month" name="month">
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5">Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+              </select>
+
+              <label for="year">Año:</label>
+              <input
+                type="number"
+                id="year"
+                name="year"
+                min="2000"
+                max="2100"
+                required
+              />
+
+              <button
+                className={theme === "dark" ? "pdf-dark" : "pdf"}
+                type="submit"
+              >
+                Generar Informe pdf
+              </button>
+            </form>
+          </section>
         </div>
-        <section>
-          <h1>Informes</h1>
-          <h3>
-            Informe de usuarios jugadores que hicieron al menos una reserva
-          </h3>
-          <button onClick={handleDownloadPdf1}>descargar pdf</button>
-          <h3>Informe de usuarios dueños que tienen al menos una cancha</h3>
-          <button onClick={handleDownloadPdf2}>descargar pdf</button>
-          <h3>Informe de todas las reservas que se hicieron en un período</h3>
-        </section>
       </>
     );
   } else {
