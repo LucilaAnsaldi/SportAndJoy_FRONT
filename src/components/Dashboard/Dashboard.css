@@ -1,4 +1,4 @@
-.dashboard-container {
+/* .dashboard-container {
   display: flex;
   flex-direction: row;
 }
@@ -43,6 +43,72 @@ input,
 select {
   margin-bottom: 12px;
   padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#add-field-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#add-field-button:hover {
+  background-color: #45a049;
+} */
+
+.dashboard-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard-right {
+  flex: 1; /* Ocupa el espacio restante en la derecha */
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.flex-fields {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.add-field-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  max-width: 300px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+input,
+select {
+  margin-bottom: 12px;
+  padding: 8px;
+  width: 100%; /* Ocupa el ancho completo del contenedor */
   border: 1px solid #ccc;
   border-radius: 4px;
 }
