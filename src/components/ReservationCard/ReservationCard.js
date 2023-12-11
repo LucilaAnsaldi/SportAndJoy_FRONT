@@ -11,7 +11,6 @@ const ReservationCard = ({ reservation }) => {
   const [isDeleted, setIsDeleted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-
   const handleCancel = () => {
     // Mostrar el modal de confirmación
     setShowConfirmation(true);
@@ -19,46 +18,46 @@ const ReservationCard = ({ reservation }) => {
 
   const handleConfirmCancel = () => {
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
       console.error("Token no encontrado.");
       return;
     }
-  
-    try {
 
-      console.log(reservation.id)
-  
-      const endpoint = role === 'ADMIN' ? `${reservation.id}/delete-admin` : `${reservation.id}/delete`;
-  
+    try {
+      console.log(reservation.id);
+
+      const endpoint =
+        role === "ADMIN"
+          ? `${reservation.id}/delete-admin`
+          : `${reservation.id}/delete`;
+
       fetch(`${API_URL}/api/Reservation/${endpoint}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        if (response.ok) {
-          // Actualiza el estado para marcar la tarjeta como eliminada
-          setIsDeleted(true);
-          console.log("Reserva cancelada con éxito");
-        } else {
-          console.error("Error al cancelar reserva");
-        }
-      })
-      .catch((error) => console.error("Error de red", error));
-  } catch (error) {
-    console.error("Error al decodificar el token:", error);
+        .then((response) => {
+          if (response.ok) {
+            // Actualiza el estado para marcar la tarjeta como eliminada
+            setIsDeleted(true);
+            console.log("Reserva cancelada con éxito");
+          } else {
+            console.error("Error al cancelar reserva");
+          }
+        })
+        .catch((error) => console.error("Error de red", error));
+    } catch (error) {
+      console.error("Error al decodificar el token:", error);
+    }
+  };
+
+  // Si la reserva ha sido eliminada, no renderiza la tarjeta
+  if (isDeleted) {
+    return null;
   }
-  
-};
-
- // Si la reserva ha sido eliminada, no renderiza la tarjeta
- if (isDeleted) {
-  return null;
-}
-
 
   return (
     <div
@@ -68,10 +67,12 @@ const ReservationCard = ({ reservation }) => {
     >
       <div className="reservation-details">
         <h3>Cancha: {reservation.field.name}</h3>
-        <p>Ubicacion:{reservation.field.location}</p>
-        <p>Del dia: {reservation.date}</p>
+        <p>Ubicacion: {reservation.field.location}</p>
+        <p>Fecha: {reservation.date.slice(0, 10)}</p>
       </div>
-      <button onClick={handleCancel} className="cancel-button">Cancelar</button>
+      <button onClick={handleCancel} className="cancel-button">
+        Cancelar
+      </button>
       {showConfirmation && (
         <div className="modal">
           <div className="modal-content">
