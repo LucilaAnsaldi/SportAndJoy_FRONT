@@ -5,6 +5,7 @@ import "./Signin.css";
 import API_URL from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
 import { RoleContext } from "../../services/role.context";
+import { ThemeContext } from "../../services/theme.context";
 
 const Signin = () => {
   // const { updateUserRole, setDecodedToken } = useUser(); // Asegúrate de tener una función setDecodedToken en el contexto
@@ -107,10 +108,15 @@ const Signin = () => {
     }
   };
 
+  const { theme } = useContext(ThemeContext);
   // navigate("/dashboard");
 
   return (
-    <div className="signin-container">
+    <div
+      className={
+        theme === "dark" ? "signin-container-dark" : "signin-container"
+      }
+    >
       <h2>Ingresá a tu cuenta</h2>
       <div className="input-container">
         <label className="label">Mail</label>
@@ -147,6 +153,7 @@ const Signin = () => {
       <button className="signin-button" type="button" onClick={signInHandler}>
         Ingresar
       </button>
+
       <p onClick={buttonNavigateSignin}>¿No tenés una cuenta? ¡Registrate!</p>
     </div>
   );

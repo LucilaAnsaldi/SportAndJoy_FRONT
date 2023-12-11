@@ -13,6 +13,21 @@
   flex-basis: calc(50% - 10px);
 }
 
+.reservation-card-dark {
+  border: 3px solid darkcyan;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #113f67;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 300px;
+  flex-basis: calc(50% - 10px);
+}
+
 .reservation-details {
   flex: 1;
 }

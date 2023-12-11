@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { RoleContext } from "../../services/role.context";
 import API_URL from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
+import { ThemeContext } from "../../services/theme.context";
 
 const FieldDetail = (props) => {
   const { name, location, image, description, sport, lockerRoom, bar, price } =
@@ -23,11 +24,45 @@ const FieldDetail = (props) => {
   const [editedBar, setEditedBar] = useState(bar);
   const [editedPrice, setEditedPrice] = useState(price);
 
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [field, setField] = useState({});
 
   const handleReserveClick = () => {
     setShowConfirmation(true);
+  };
+
+  const handleDeleteField = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleConfirmDeleteField = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`${API_URL}/api/Field/${id}/delete-admin`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Manejar la eliminación exitosa según sea necesario
+        console.log("Campo eliminado exitosamente");
+        // Redirigir a la página principal u otro lugar
+        navigate("/dashboard");
+      } else {
+        console.error("Error al eliminar el campo:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
+
+  const handleCancelDeleteField = () => {
+    setShowDeleteConfirmation(false);
   };
 
   ///////CREAR RESERVA
@@ -158,11 +193,18 @@ const FieldDetail = (props) => {
     sportName = "Tenis";
   }
 
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <Header />
 
-      <div className="field-detail field-card">
+      <div
+        className={
+          theme === "dark"
+            ? "field-detail-dark field-card"
+            : "field-detail field-card"
+        }
+      >
         <img src={image} alt={name} className="field-image" />
         <div className="field-info">
           <h2> {editedName}</h2>
@@ -243,9 +285,16 @@ const FieldDetail = (props) => {
                   </button>
                 ))}
               {role === "ADMIN" && (
-                <button className="delete-button" onClick={handleEditClick}>
+                <button className="delete-button" onClick={handleDeleteField}>
                   Eliminar
                 </button>
+              )}
+              {showDeleteConfirmation && (
+                <div className={theme === "dark" ? "popup-dark" : "popup"}>
+                  <p>¿Seguro que quieres eliminar?</p>
+                  <button onClick={handleConfirmDeleteField}>Sí</button>
+                  <button onClick={handleCancelDeleteField}>No</button>
+                </div>
               )}
               {role === "PLAYER" && (
                 <button className="reserve-button" onClick={handleReserveClick}>
@@ -253,7 +302,7 @@ const FieldDetail = (props) => {
                 </button>
               )}
               {showConfirmation && (
-                <div className="popup">
+                <div className={theme === "dark" ? "popup-dark" : "popup"}>
                   <p>¿Seguro que desea reservar?</p>
                   <button onClick={handleConfirmReservation}>Sí</button>
                   <button onClick={handleCancelReservation}>No</button>

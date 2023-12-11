@@ -10,15 +10,27 @@ h1 {
 }
 
 .add-user-popup {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 10%;
+  left: 34%;
+  background-color: white;
+  padding: 8%;
+  border: 5px solid lightskyblue;
+  border-radius: 5px;
+}
+
+.add-user-popup-dark {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 10%;
-  height: 20rem;
-  width: 10rem;
-  border: 1px solid #ccc;
+  background-color: #233142;
+  padding: 8%;
+  border: 5px solid darkcyan;
   border-radius: 5px;
 }
 

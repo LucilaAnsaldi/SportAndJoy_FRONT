@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./UsersCard.css";
 import avatarImage from "../../assets/images/default_avatar.jpg";
 import API_URL from "../../constants/api";
+import { ThemeContext } from "../../services/theme.context";
 
 const UsersCard = ({ user, onDeleteUser }) => {
   // console.log("User prop en UsersCard:", user);
@@ -63,8 +64,9 @@ const UsersCard = ({ user, onDeleteUser }) => {
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
+  const { theme } = useContext(ThemeContext);
   return (
-    <div className="users-card">
+    <div className={theme === "dark" ? "users-card-dark" : "users-card"}>
       <div className="users-details">
         <img className="userpic" src={imageUrl} alt="foto del usuario" />
         <h3>

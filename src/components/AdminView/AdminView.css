@@ -37,6 +37,33 @@
   background-color: #f44336;
   color: white;
 }
+.users-button-dark {
+  position: absolute;
+  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
+  margin-left: 25%; /* Puedes ajustar este valor según sea necesario */
+  background-color: #113f67; /* Green */
+  border: none;
+  color: #113f67;
+  padding: 20px 60px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 40px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  position: center;
+}
+
+.users-button-dark {
+  background-color: #113f67;
+  color: black;
+  border: 4px solid lightskyblue;
+  border-radius: 8px;
+}
+
+.users-button-dark:hover {
+  background-color: lightskyblue;
+  color: white;
+}
 
 .reservations-button {
   margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
@@ -66,8 +93,36 @@
   color: white;
 }
 
+.reservations-button-dark {
+  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
+  margin-left: 60%; /* Puedes ajustar este valor según sea necesario */
+
+  background-color: #04aa6d; /* Green */
+  border: none;
+  color: #113f67;
+  padding: 20px 60px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 40px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  position: center;
+}
+
+.reservations-button-dark {
+  background-color: #113f67;
+  color: black;
+  border: 4px solid lightskyblue;
+  border-radius: 8px;
+}
+
+.reservations-button-dark:hover {
+  background-color: lightskyblue;
+  color: white;
+}
+
 .allFields-button {
-  margin-top: 15%; /* Puedes ajustar este valor según sea necesario */
+  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
   margin-left: 35%; /* Puedes ajustar este valor según sea necesario */
   background-color: #04aa6d; /* Green */
   border: none;
@@ -90,5 +145,32 @@
 
 .allFields-button:hover {
   background-color: #f44336;
+  color: white;
+}
+
+.allFields-button-dark {
+  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
+  margin-left: 35%; /* Puedes ajustar este valor según sea necesario */
+  background-color: #04aa6d; /* Green */
+  border: none;
+  color: #113f67;
+  padding: 20px 60px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 40px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  position: center;
+}
+
+.allFields-button-dark {
+  background-color: #113f67;
+  color: black;
+  border: 4px solid lightskyblue;
+  border-radius: 8px;
+}
+
+.allFields-button-dark:hover {
+  background-color: lightskyblue;
   color: white;
 }

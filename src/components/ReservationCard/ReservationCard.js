@@ -2,8 +2,10 @@ import React, { useContext, useState } from "react";
 import "./ReservationCard.css";
 import { RoleContext } from "../../services/role.context";
 import API_URL from "../../constants/api";
+import { ThemeContext } from "../../services/theme.context";
 
-const ReservationCard = ({reservation}) => {
+const ReservationCard = ({ reservation }) => {
+  const { theme } = useContext(ThemeContext);
   console.log("User prop en ReservationCard:", reservation);
   const { role } = useContext(RoleContext);
   const [isDeleted, setIsDeleted] = useState(false);
@@ -59,7 +61,11 @@ const ReservationCard = ({reservation}) => {
 
 
   return (
-    <div className="reservation-card">
+    <div
+      className={
+        theme === "dark" ? "reservation-card-dark" : "reservation-card"
+      }
+    >
       <div className="reservation-details">
         <h3>Cancha: {reservation.field.name}</h3>
         <p>Ubicacion:{reservation.field.location}</p>

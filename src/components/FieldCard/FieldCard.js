@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./FieldCard.css";
+import { ThemeContext } from "../../services/theme.context";
 
 const FieldCard = ({ field, onCardClick }) => {
   const handleCardClick = () => {
@@ -13,14 +14,25 @@ const FieldCard = ({ field, onCardClick }) => {
   } else if (field.sport === 2) {
     sport = "Tenis";
   }
+  const { theme } = useContext(ThemeContext);
   return (
-    <div className="tarjeta" onClick={handleCardClick}>
+    <div
+      className={theme === "dark" ? "tarjeta-dark" : "tarjeta"}
+      onClick={handleCardClick}
+    >
       <img className="imagen-field" src={field.image} alt={field.name} />
       <div className="info-field">
-        <h2>{field.name}</h2>
+        <h2 className={theme === "dark" ? "field-name-dark" : "field-name"}>
+          {field.name}
+        </h2>
         <p className="deporte">{sport}</p>
-        <p className="ubicacion">{field.location}</p>
-        <p className="precio"> $ {field.price}</p>
+        <p className={theme === "dark" ? "ubicacion-dark" : "ubicacion"}>
+          {field.location}
+        </p>
+        <p className={theme === "dark" ? "precio-dark" : "precio"}>
+          {" "}
+          $ {field.price}
+        </p>
       </div>
     </div>
   );

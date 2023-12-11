@@ -23,7 +23,7 @@
   padding: 16px;
 }
 
-h2 {
+.field-name {
   margin-bottom: 8px;
   font-size: 1.5rem;
   color: #333;
@@ -69,4 +69,32 @@ h2 {
   cursor: pointer;
   margin-top: 10px;
   margin-left: 20%;
+}
+
+.tarjeta-dark {
+  border: 3px solid darkcyan;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #113f67;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  max-width: 300px;
+  flex-basis: calc(50% - 10px);
+}
+
+.field-name-dark {
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  color: lightgrey;
+}
+
+.ubicacion-dark,
+.precio-dark {
+  font-size: 1rem;
+  color: lightgray;
+  margin-bottom: 4px;
 }

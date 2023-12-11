@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRef } from "react";
 import { useNavigate } from "react-router";
 import "./Signup.css";
 import API_URL from "../../constants/api";
+import { ThemeContext } from "../../services/theme.context";
 
 const Signup = () => {
   const [image, setImage] = useState("");
@@ -95,10 +96,15 @@ const Signup = () => {
     }
   };
 
+  const { theme } = useContext(ThemeContext);
   // navigate("/dashboard");
 
   return (
-    <div className="signup-container">
+    <div
+      className={
+        theme === "dark" ? "signup-container-dark" : "signup-container"
+      }
+    >
       <h2>Creá tu cuenta</h2>
       <div className="input-container">
         <label className="label">Imagen</label>
