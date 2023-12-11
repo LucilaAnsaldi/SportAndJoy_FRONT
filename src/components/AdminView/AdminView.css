@@ -1,13 +1,18 @@
-.bpdy {
+/* .bpdy {
   margin-top: 3rem;
   padding: 0;
   width: 18%;
-  display: block; /* Cambiar a bloque en lugar de inline-block */
+  display: block; 
   max-width: none;
-  margin: 0 auto; /* Centrar horizontalmente utilizando margen auto */
+  margin: 0 auto; 
   border: none;
   background-color: transparent;
   box-shadow: none;
+} */
+
+.body-dark {
+  background-color: #020c1a;
+  color: white;
 }
 
 .users-button {
@@ -173,4 +178,77 @@
 .allFields-button-dark:hover {
   background-color: lightskyblue;
   color: white;
+}
+
+/* --------------- section */
+
+.section {
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 3rem;
+  padding: 20px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  border: 4px solid #f44336;
+}
+
+.section-dark {
+  background-color: #113f67;
+  color: black;
+  border: 4px solid lightskyblue;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 3rem;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 200%;
+}
+
+h3 {
+  margin-top: 20px;
+  font-weight: 500;
+}
+
+.textos {
+  color: black;
+}
+
+.textos-dark {
+  color: rgb(225, 223, 223);
+}
+
+.pdf {
+  background-color: #9f9e9e;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pdf-dark {
+  background-color: #020c1a;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pdf:hover {
+  background-color: #f44336;
+}
+
+.pdf-dark:hover {
+  background-color: lightskyblue;
+  color: black;
 }
