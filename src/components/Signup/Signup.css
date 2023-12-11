@@ -8,6 +8,16 @@
   background-color: #f2f2f2;
 }
 
+.signup-container-dark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #020c1a;
+}
+
 .input-container {
   display: flex;
   flex-direction: column;
