@@ -10,6 +10,7 @@ import { ThemeContext } from "../../services/theme.context";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [editedUser, setEditedUser] = useState(null); // Nuevo estado para el usuario editado
   const [showAddUserPopup, setShowAddUserPopup] = useState(false);
   const [newUser, setNewUser] = useState({
     image: null,
@@ -20,6 +21,10 @@ const Users = () => {
     role: "PLAYER",
   });
 
+  const handleUpdateUser = (updatedUser) => {
+    setEditedUser(updatedUser);
+  };
+
   const handleAddUserClick = () => {
     setShowAddUserPopup(true);
   };
@@ -28,6 +33,15 @@ const Users = () => {
     const { name, value } = e.target;
     setNewUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
+
+  useEffect(() => {
+    if (editedUser) {
+      setUsers((prevUsers) =>
+        prevUsers.map((user) => (user.id === editedUser.id ? editedUser : user))
+      );
+      setEditedUser(null); // Reiniciar el estado después de la actualización
+    }
+  }, [editedUser]);
 
   //POST USER
 
@@ -125,6 +139,7 @@ const Users = () => {
             key={user.id}
             user={user}
             onDeleteUser={handleDeleteUser}
+            onUpdateUser={handleUpdateUser}
           />
         ))}
       </div>
