@@ -18,7 +18,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const { role } = useContext(RoleContext);
   const [userData, setUserData] = useState({});
-
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const { theme } = useContext(ThemeContext);
   const imageUrl = image ? image : avatarImage;
 
   const handleEditClick = () => {
@@ -74,6 +75,11 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
+    // Muestra el popup de confirmación
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmLogout = () => {
     // Limpiar el token del localStorage
     localStorage.removeItem("token");
     navigate("/signin");
@@ -111,9 +117,6 @@ const Profile = () => {
       }
     }
   }, []); // Asegúrate de que este sea un arreglo vacío
-
-  console.log(name);
-  const { theme } = useContext(ThemeContext);
 
   return (
     <>
@@ -187,10 +190,48 @@ const Profile = () => {
                 <label>Email:</label>
                 <span>{email}</span>
               </div>
-              <button onClick={handleEditClick}>Editar</button>
-              {role === "ADMIN" && (
-                <button onClick={handleLogout}>Cerrar sesión</button>
-              )}
+              <button className="editar" onClick={handleEditClick}>
+                Editar
+              </button>
+              <>
+                <button
+                  className="cerrarSesion"
+                  onClick={() => setShowConfirmation(true)}
+                >
+                  Cerrar sesión
+                </button>
+                {showConfirmation && (
+                  <div className="modal">
+                    <div
+                      className={
+                        theme === "dark" ? "modalContent-dark" : "modalContent"
+                      }
+                    >
+                      <p>¿Estás seguro que deseas salir?</p>
+                      <button
+                        className={
+                          theme === "dark"
+                            ? "confirmButton-dark"
+                            : "confirmButton"
+                        }
+                        onClick={handleConfirmLogout}
+                      >
+                        Sí
+                      </button>
+                      <button
+                        className={
+                          theme === "dark"
+                            ? "cancelButton-dark"
+                            : "cancelButton"
+                        }
+                        onClick={() => setShowConfirmation(false)}
+                      >
+                        No
+                      </button>{" "}
+                    </div>
+                  </div>
+                )}
+              </>
             </div>
           )}
         </div>

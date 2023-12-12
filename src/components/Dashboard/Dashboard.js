@@ -277,9 +277,7 @@ const Dashboard = () => {
                   value={newField.sport}
                   onChange={handleAddFieldChange}
                 >
-                  <option value="" disabled hidden>
-                    Seleccione un deporte
-                  </option>
+                  <option value="">Seleccionar Usuario</option>
                   <option value="0">Fútbol</option>
                   <option value="1">Vóley</option>
                   <option value="2">Tenis</option>
@@ -319,6 +317,8 @@ const Dashboard = () => {
                   // value={selectedUserId}
                   onChange={(e) => setSelectedUserId(e.target.value)}
                 >
+                  <option value="">Seleccionar Usuario</option>
+
                   {ownerUsers.map((user) => (
                     <option key={user.id} value={user.id}>
                       {user.id}

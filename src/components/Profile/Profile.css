@@ -9,6 +9,20 @@
   background-color: transparent;
   box-shadow: none;
 }
+.modalContent {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: black;
+}
+
+.modalContent-dark {
+  background: #113f67;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
 
 .perfil-header {
   margin-top: 10px; /* Cambiar margin-bottom a margin-top */
@@ -34,16 +48,25 @@
   border-radius: 5px;
 }
 
-.perfil-datos button {
+.editar {
   background-color: #94c3dd;
   color: #303030;
   border: none;
   border-radius: 5px;
   padding: 5%;
-  width: 80%;
+  width: 85%;
   cursor: pointer;
 }
 
+.cerrarSesion {
+  background-color: #94c3dd;
+  color: #303030;
+  border: none;
+  border-radius: 5px;
+  padding: 5%;
+  width: 85%;
+  cursor: pointer;
+}
 .perfil-datos button:hover {
   background-color: #217dbb;
 }
@@ -58,4 +81,56 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.confirmButton-dark {
+  align-items: center;
+  background-color: lightcoral;
+  color: #303030;
+  border: none;
+  border-radius: 5px;
+  padding: 5%;
+  width: 25%;
+  margin: 10%;
+  cursor: pointer;
+}
+
+.confirmButton-dark:hover {
+}
+
+/* Estilos específicos para confirmButton */
+.confirmButton {
+  color: green;
+}
+
+.confirmButton:hover {
+  /* Estilos específicos aquí */
+}
+
+/* Estilos específicos para cancelButton-dark */
+.cancelButton-dark {
+  align-items: center;
+  background-color: lightgreen;
+  color: #303030;
+  border: none;
+  border-radius: 5px;
+  padding: 5%;
+  width: 25%;
+  margin: 10%;
+  cursor: pointer;
+
+  /* Estilos específicos aquí */
+}
+
+.cancelButton-dark:hover {
+  /* Estilos específicos aquí */
+}
+
+/* Estilos específicos para cancelButton */
+.cancelButton {
+  color: red;
+}
+
+.cancelButton:hover {
+  /* Estilos específicos aquí */
 }
