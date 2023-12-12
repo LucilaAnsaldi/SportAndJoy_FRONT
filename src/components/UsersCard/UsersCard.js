@@ -4,7 +4,7 @@ import avatarImage from "../../assets/images/default_avatar.jpg";
 import API_URL from "../../constants/api";
 import { ThemeContext } from "../../services/theme.context";
 
-const UsersCard = ({ user, onDeleteUser }) => {
+const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -60,6 +60,7 @@ const UsersCard = ({ user, onDeleteUser }) => {
         }
       );
       if (response.ok) {
+        onUpdateUser(editedUser);
         setIsEditing(false);
       } else {
         console.log("Error al editar usuario:", await response.text());

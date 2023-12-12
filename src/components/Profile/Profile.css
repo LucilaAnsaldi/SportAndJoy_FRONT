@@ -38,6 +38,7 @@
   display: block; /* Asegurarse de que los labels sean bloques */
   font-weight: bold;
   margin: 5px 0; /* Cambiar margin-bottom a un margen vertical */
+  margin-top: 1rem;
 }
 
 .perfil-datos input,
@@ -54,24 +55,29 @@
   border: none;
   border-radius: 5px;
   padding: 5%;
-  width: 85%;
+  width: 35%;
   cursor: pointer;
+  float: left;
+  margin-top: 2rem;
 }
 
 .cerrarSesion {
-  background-color: #94c3dd;
+  margin-top: 2rem;
+  background-color: #d28181;
   color: #303030;
   border: none;
   border-radius: 5px;
   padding: 5%;
-  width: 85%;
+  width: 45%;
   cursor: pointer;
+  float: right;
 }
 .perfil-datos button:hover {
   background-color: #217dbb;
 }
 
 .userpic-container {
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -207,7 +207,7 @@ const Dashboard = () => {
             role === "ADMIN" || role === "OWNER" ? "admin-owner" : "player"
           }`}
         >
-          {(role === "ADMIN" || role === "OWNER") && (
+          {role === "ADMIN" && (
             <>
               <Search />
               <button id="add-field-button" onClick={handleAddFieldClick}>
@@ -216,6 +216,11 @@ const Dashboard = () => {
             </>
           )}
           {role !== "ADMIN" && role !== "OWNER" && <Search />}
+          {role === "OWNER" && (
+            <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+              Mis Canchas
+            </h3>
+          )}
           <div className="flex-fields">
             {fields.map((field) => (
               <FieldCard
