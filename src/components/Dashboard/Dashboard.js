@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [showAddFieldPopup, setShowAddFieldPopup] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [ownerUsers, setOwnerUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [newField, setNewField] = useState({
     image: null,
     name: "",
@@ -28,6 +29,22 @@ const Dashboard = () => {
     lockerRoom: false,
     bar: false,
     price: 0,
+  });
+
+  // Método para manejar cambios en la barra de búsqueda
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Filtrar canchas según el término de búsqueda
+  const filteredFields = fields.filter((field) => {
+    const fieldMatchesSearch =
+      field.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      field.location.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Puedes agregar más condiciones según tus necesidades
+
+    return fieldMatchesSearch;
   });
 
   const handleAddFieldClick = () => {
@@ -209,20 +226,20 @@ const Dashboard = () => {
         >
           {role === "ADMIN" && (
             <>
-              <Search />
+              <Search onSearchChange={handleSearchChange}/>
               <button id="add-field-button" onClick={handleAddFieldClick}>
                 Agregar Cancha
               </button>
             </>
           )}
-          {role !== "ADMIN" && role !== "OWNER" && <Search />}
+          {role !== "ADMIN" && role !== "OWNER" && <Search onSearchChange={handleSearchChange}/>}
           {role === "OWNER" && (
             <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
               Mis Canchas
             </h3>
           )}
           <div className="flex-fields">
-            {fields.map((field) => (
+            {filteredFields.map((field) => (
               <FieldCard
                 key={field.id}
                 field={field}

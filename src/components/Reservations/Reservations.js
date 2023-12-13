@@ -16,6 +16,7 @@ const Reservations = () => {
   const [selectedUserId, setSelectedUserId] = useState([]); // Nuevo estado
   const [fields, setFields] = useState([]);
   const [playerUsers, setPlayerUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // Nuevo estado
 
   const navigate = useNavigate();
 
@@ -182,12 +183,17 @@ const Reservations = () => {
           ? "Reservas de mis canchas"
           : "Mis Reservas"}
       </h1>
-      <Search />
+      <Search onSearchChange={(e) => setSearchTerm(e.target.value)}/>
       <div className="container">
         {Array.isArray(reservations) &&
-          reservations.map((reservation) => (
-            <ReservationCard key={reservation.id} reservation={reservation} />
-          ))}
+          reservations
+            .filter((reservation) =>
+              reservation.field.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              reservation.field.location.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .map((reservation) => (
+              <ReservationCard key={reservation.id} reservation={reservation} />
+            ))}
       </div>
 
       {role === "ADMIN" && (

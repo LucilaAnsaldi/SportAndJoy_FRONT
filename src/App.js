@@ -18,6 +18,7 @@ import { ThemeContext } from "./services/theme.context";
 import ToggleTheme from "./components/toggleTheme/ToggleTheme";
 import NotFound from "./components/NotFound/NotFound";
 import { RoleContext } from "./services/role.context";
+import { Protected } from "./components/Security/Protected/Protected";
 
 const App = () => {
   const { theme } = useContext(ThemeContext);
@@ -37,7 +38,9 @@ const App = () => {
       path: "/dashboard",
       element:
         role === "OWNER" || role === "PLAYER" ? (
+          <Protected>
           <Dashboard />
+          </Protected>
         ) : (
           <Navigate to="/adminView" />
         ),
@@ -45,27 +48,32 @@ const App = () => {
 
     {
       path: "/allFields",
-      element: <Dashboard />,
+      element: 
+      <Protected>
+      <Dashboard />
+      </Protected>,
     },
     {
       path: "/profile",
-      element: <Profile />,
+      element: <Protected> 
+        <Profile />
+        </Protected>,
     },
     {
       path: "/reservations",
-      element: <Reservations />,
+      element: <Protected> <Reservations /> </Protected>,
     },
     {
       path: "/fieldDetail/:id",
-      element: <FieldDetail />,
+      element: <Protected> <FieldDetail /> </Protected>,
     },
     {
       path: "/users",
-      element: <Users />,
+      element: <Protected> <Users /> </Protected>,
     },
     {
       path: "/adminView",
-      element: <AdminView />,
+      element: <Protected> <AdminView /> </Protected>,
     },
     {
       path: "*",

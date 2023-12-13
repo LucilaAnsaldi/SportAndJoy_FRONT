@@ -3,7 +3,7 @@ import "./Search.css";
 import { useContext } from "react";
 import { ThemeContext } from "../../services/theme.context";
 
-export const Search = () => {
+export const Search = ({onSearchChange}) => {
   const { theme } = useContext(ThemeContext);
   return (
     <div
@@ -11,7 +11,7 @@ export const Search = () => {
         theme === "dark" ? "search-container-dark" : "search-container"
       }
     >
-      <input type="text" class="search-input" placeholder="Buscar..." />
+      <input type="text" class="search-input" placeholder="Buscar..." onChange={onSearchChange}/>
     </div>
   );
 };

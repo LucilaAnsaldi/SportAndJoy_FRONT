@@ -12,6 +12,8 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [editedUser, setEditedUser] = useState(null); // Nuevo estado para el usuario editado
   const [showAddUserPopup, setShowAddUserPopup] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [newUser, setNewUser] = useState({
     image: null,
     firstName: "",
@@ -24,6 +26,18 @@ const Users = () => {
   const handleUpdateUser = (updatedUser) => {
     setEditedUser(updatedUser);
   };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Renderización de los usuarios con el filtro
+  const filteredUsers = users.filter((user) =>
+    user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   const handleAddUserClick = () => {
     setShowAddUserPopup(true);
@@ -125,16 +139,17 @@ const Users = () => {
   }, []);
 
   const { theme } = useContext(ThemeContext);
+
   return (
     <>
       <Header />
       <h1>Usuarios activos</h1>
-      <Search />
+      <Search  onSearchChange={handleSearchChange} />
       <button id="add-user-button" onClick={handleAddUserClick}>
         Agregar Usuario
       </button>
       <div className="container">
-        {users.map((user) => (
+        {filteredUsers.map((user) => (
           <UsersCard
             key={user.id}
             user={user}
