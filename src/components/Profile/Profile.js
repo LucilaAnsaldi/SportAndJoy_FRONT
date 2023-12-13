@@ -21,15 +21,29 @@ const Profile = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { theme } = useContext(ThemeContext);
   const imageUrl = image ? image : avatarImage;
+  const [isEmailValid, setIsEmailValid] = useState(true); // Nuevo estado
+  const [isNameValid, setIsNameValid] = useState(true);;
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLastnameValid, setIsLastnameValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
 
   const handleEditClick = () => {
     setIsEditing(true);
+    setShowPassword(true);
   };
 
   const handleSaveClick = () => {
+     // Validaciones adicionales
+     if (!isNameValid || !isLastnameValid || !isEmailValid || !isPasswordValid) {
+      // No permite guardar si alguna validación falla
+      return;
+    }
+    
     // Realiza la lógica para enviar los datos actualizados al backend
     const token = localStorage.getItem("token");
     const userId = jwtDecode(token).sub;
+
     fetch(`${API_URL}/api/User/${userId}/edit`, {
       method: "PUT",
       headers: {
@@ -41,7 +55,7 @@ const Profile = () => {
         lastName: lastname,
         email: email,
         image: image,
-      }),
+        password:password}),
     })
       .then((response) => {
         if (!response.ok) {
@@ -60,19 +74,32 @@ const Profile = () => {
       .catch((error) => {
         console.error("Error updating user data:", error.message);
       });
+      setIsEditing(false);
   };
+
 
   const handleInputChange = (e) => {
     if (e.target.name === "name") {
       setName(e.target.value);
-    } else if (e.target.name === "lastname") {
+      setIsNameValid(e.target.value.trim() !== "");
+    }
+     else if (e.target.name === "lastname") {
       setLastname(e.target.value);
+      setIsLastnameValid(e.target.value.trim() !== "");
     } else if (e.target.name === "email") {
-      setEmail(e.target.value);
+      const inputEmail = e.target.value;
+      setEmail(inputEmail);
+      // Validar el formato del correo electrónico
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setIsEmailValid(emailRegex.test(inputEmail));
     } else if (e.target.name === "image") {
       setImage(e.target.value);
+    } else if ((e.target.name === "password")){
+      setPassword(e.target.value);
+      setIsPasswordValid(e.target.value.length >= 6 || e.target.value.length === 0);
     }
   };
+
 
   const handleLogout = () => {
     // Muestra el popup de confirmación
@@ -107,6 +134,7 @@ const Profile = () => {
             setLastname(userData.lastName);
             setEmail(userData.email);
             setImage(userData.image);
+            setPassword(userData.password)
             setUserData(userData);
           })
           .catch((error) => {
@@ -119,124 +147,309 @@ const Profile = () => {
   }, []); // Asegúrate de que este sea un arreglo vacío
 
   return (
+    // <>
+    //   <Header />
+    //   <ToggleTheme />
+    //   <div className="perfil-container">
+    //     <div className="perfil-header">
+    //       <h1>Mi perfil</h1>
+    //     </div>
+    //     <div className="perfil-datos">
+    //       {isEditing ? (
+    //         <div>
+    //           <div>
+    //             <label>Cambia tu foto de perfil:</label>
+    //             <input
+    //               type="text"
+    //               name="image"
+    //               value={imageUrl}
+    //               onChange={handleInputChange}
+    //             />
+    //           </div>
+    //           <div>
+    //             <label>Nombre:</label>
+    //             <input
+    //               type="text"
+    //               name="name"
+    //               value={name}
+    //               onChange={handleInputChange}
+    //               style={{ borderColor: isNameValid ? "" : "red" }}
+    //             />
+    //              {!isNameValid && (
+    //             <div style={{ color: "red", marginTop: "5px" }}>
+    //               El nombre no puede estar vacío.
+    //             </div>
+    //           )}
+    //           </div>
+    //           <div>
+    //             <label>Apellido:</label>
+    //             <input
+    //               type="text"
+    //               name="lastname"
+    //               value={lastname}
+    //               onChange={handleInputChange}
+    //               style={{ borderColor: isLastnameValid ? "" : "red" }}
+    //             />
+    //             {!isLastnameValid && (
+    //             <div style={{ color: "red", marginTop: "5px" }}>
+    //               El apellido no puede estar vacío.
+    //             </div>
+    //           )}
+    //           </div>
+    //           <div>
+    //             <label>Email:</label>
+    //             <input
+    //               type="email"
+    //               name="email"
+    //               value={email}
+    //               onChange={handleInputChange}
+    //               style={{ borderColor: isEmailValid ? "" : "red" }}
+    //             />
+    //             {!isEmailValid && (
+    //               <div style={{ color: "red", marginTop: "5px" }}>
+    //                 Formato de correo electrónico inválido.
+    //               </div>
+    //             )}
+    //           </div>
+              
+    //           <button onClick={handleSaveClick}>Guardar</button>
+    //         </div>
+    //       ) : (
+    //         <div>
+    //           <div>
+    //             <div className="userpic-container">
+    //               <img
+    //                 className="userpic"
+    //                 src={imageUrl}
+    //                 alt="foto del usuario"
+    //               />
+    //             </div>
+    //           </div>
+    //           <div>
+    //             <label>Nombre:</label>
+    //             <span>{name}</span>
+    //           </div>
+    //           <div>
+    //             <label>Apellido:</label>
+    //             <span>{lastname}</span>
+    //           </div>
+    //           <div>
+    //             <label>Email:</label>
+    //             <span>{email}</span>
+    //           </div>
+    //           <button className="editar" onClick={handleEditClick}>
+    //             Editar
+    //           </button>
+    //           <>
+    //             <button
+    //               className="cerrarSesion"
+    //               onClick={() => setShowConfirmation(true)}
+    //             >
+    //               Cerrar sesión
+    //             </button>
+    //             {showConfirmation && (
+    //               <div className="modal">
+    //                 <div
+    //                   className={
+    //                     theme === "dark" ? "modalContent-dark" : "modalContent"
+    //                   }
+    //                 >
+    //                   <p>¿Estás seguro que deseas salir?</p>
+    //                   <button
+    //                     className={
+    //                       theme === "dark"
+    //                         ? "confirmButton-dark"
+    //                         : "confirmButton"
+    //                     }
+    //                     onClick={handleConfirmLogout}
+    //                   >
+    //                     Sí
+    //                   </button>
+    //                   <button
+    //                     className={
+    //                       theme === "dark"
+    //                         ? "cancelButton-dark"
+    //                         : "cancelButton"
+    //                     }
+    //                     onClick={() => setShowConfirmation(false)}
+    //                   >
+    //                     No
+    //                   </button>{" "}
+    //                 </div>
+    //               </div>
+    //             )}
+    //           </>
+    //         </div>
+    //       )}
+    //     </div>
+    //   </div>
+    // </>
     <>
-      <Header />
-      <ToggleTheme />
-      <div className="perfil-container">
-        <div className="perfil-header">
-          <h1>Mi perfil</h1>
-        </div>
-        <div className="perfil-datos">
-          {isEditing ? (
+    <Header />
+    <ToggleTheme />
+    <div className="perfil-container">
+      <div className="perfil-header">
+        <h1>Mi perfil</h1>
+      </div>
+      <div className="perfil-datos">
+        {isEditing ? (
+          <div>
             <div>
-              <div>
-                <label>Cambia tu foto de perfil:</label>
-                <input
-                  type="text"
-                  name="image"
-                  value={imageUrl}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div>
-                <label>Nombre:</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div>
-                <label>Apellido:</label>
-                <input
-                  type="text"
-                  name="lastname"
-                  value={lastname}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div>
-                <label>Email:</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <button onClick={handleSaveClick}>Guardar</button>
+              <label>Cambia tu foto de perfil:</label>
+              <input
+                type="text"
+                name="image"
+                value={imageUrl}
+                onChange={handleInputChange}
+              />
             </div>
-          ) : (
             <div>
-              <div>
-                <div className="userpic-container">
-                  <img
-                    className="userpic"
-                    src={imageUrl}
-                    alt="foto del usuario"
-                  />
+              <label>Nombre:</label>
+              <input
+                type="text"
+                name="name"
+                value={name}
+                onChange={handleInputChange}
+                style={{ borderColor: isNameValid ? "" : "red" }}
+              />
+              {!isNameValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  El nombre no puede estar vacío.
                 </div>
-              </div>
+              )}
+            </div>
+            <div>
+              <label>Apellido:</label>
+              <input
+                type="text"
+                name="lastname"
+                value={lastname}
+                onChange={handleInputChange}
+                style={{ borderColor: isLastnameValid ? "" : "red" }}
+              />
+              {!isLastnameValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  El apellido no puede estar vacío.
+                </div>
+              )}
+            </div>
+            <div>
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                value={email}
+                onChange={handleInputChange}
+                style={{ borderColor: isEmailValid ? "" : "red" }}
+              />
+              {!isEmailValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  Formato de correo electrónico inválido.
+                </div>
+              )}
+            </div>
               <div>
-                <label>Nombre:</label>
-                <span>{name}</span>
-              </div>
-              <div>
-                <label>Apellido:</label>
-                <span>{lastname}</span>
-              </div>
-              <div>
-                <label>Email:</label>
-                <span>{email}</span>
-              </div>
-              <button className="editar" onClick={handleEditClick}>
-                Editar
-              </button>
-              <>
-                <button
-                  className="cerrarSesion"
-                  onClick={() => setShowConfirmation(true)}
-                >
-                  Cerrar sesión
-                </button>
-                {showConfirmation && (
-                  <div className="modal">
-                    <div
-                      className={
-                        theme === "dark" ? "modalContent-dark" : "modalContent"
-                      }
-                    >
-                      <p>¿Estás seguro que deseas salir?</p>
-                      <button
-                        className={
-                          theme === "dark"
-                            ? "confirmButton-dark"
-                            : "confirmButton"
-                        }
-                        onClick={handleConfirmLogout}
-                      >
-                        Sí
-                      </button>
-                      <button
-                        className={
-                          theme === "dark"
-                            ? "cancelButton-dark"
-                            : "cancelButton"
-                        }
-                        onClick={() => setShowConfirmation(false)}
-                      >
-                        No
-                      </button>{" "}
-                    </div>
+                <label>Contraseña:</label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={password}
+                  onChange={handleInputChange}
+                  style={{
+                    borderColor:
+                      (!isPasswordValid || password.length < 6) && "red",
+                  }}
+                />
+                {!isPasswordValid && (
+                  <div style={{ color: "red", marginTop: "5px" }}>
+                    {password.length === 0
+                      ? "La contraseña no puede estar vacía."
+                      : "La contraseña debe tener al menos 6 caracteres."}
                   </div>
                 )}
-              </>
+              </div>
+            <button onClick={handleSaveClick}>Guardar</button>
+          </div>
+        ) : (
+          <div>
+            <div>
+              <div className="userpic-container">
+                <img
+                  className="userpic"
+                  src={imageUrl}
+                  alt="foto del usuario"
+                />
+              </div>
             </div>
-          )}
-        </div>
+            <div>
+              <label>Nombre:</label>
+              <span>{name}</span>
+            </div>
+            <div>
+              <label>Apellido:</label>
+              <span>{lastname}</span>
+            </div>
+            <div>
+              <label>Email:</label>
+              <span>{email}</span>
+            </div>
+              <div>
+                <label>Contraseña:</label>
+                <input
+                  type="password"
+                  name="password"
+                  value="********" // Aquí puedes mostrar asteriscos o lo que prefieras
+                  readOnly
+                  style={{ borderColor: "transparent" }}
+                />
+              </div>
+            <button className="editar" onClick={handleEditClick}>
+              Editar
+            </button>
+            <>
+              <button
+                className="cerrarSesion"
+                onClick={() => setShowConfirmation(true)}
+              >
+                Cerrar sesión
+              </button>
+              {showConfirmation && (
+                <div className="modal">
+                  <div
+                    className={
+                      theme === "dark" ? "modalContent-dark" : "modalContent"
+                    }
+                  >
+                    <p>¿Estás seguro que deseas salir?</p>
+                    <button
+                      className={
+                        theme === "dark"
+                          ? "confirmButton-dark"
+                          : "confirmButton"
+                      }
+                      onClick={handleConfirmLogout}
+                    >
+                      Sí
+                    </button>
+                    <button
+                      className={
+                        theme === "dark"
+                          ? "cancelButton-dark"
+                          : "cancelButton"
+                      }
+                      onClick={() => setShowConfirmation(false)}
+                    >
+                      No
+                    </button>{" "}
+                  </div>
+                </div>
+              )}
+            </>
+          </div>
+        )}
       </div>
-    </>
+    </div>
+  </>
   );
 };
 

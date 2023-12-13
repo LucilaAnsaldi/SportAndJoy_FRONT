@@ -154,8 +154,22 @@ const Signin = () => {
       <button className="signin-button" type="button" onClick={signInHandler}>
         Ingresar
       </button>
-
-      <p onClick={buttonNavigateSignin}>¿No tenés una cuenta? ¡Registrate!</p>
+      <p>
+  ¿No tenés una cuenta?{" "}
+  <a href="#" onClick={buttonNavigateSignin}>
+    ¡Registrate!
+  </a>
+</p>
+      <p>
+  ¿Tenés canchas para alquilar?{" "}
+  <a
+    href="https://forms.gle/SyaMTya5DL83Mwyd7"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    ¡Contactanos!
+  </a>
+</p>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import "./Users.css";
 import { Search } from "../Search/Search";
 import API_URL from "../../constants/api";
 import { ThemeContext } from "../../services/theme.context";
+import avatarImage from "../../assets/images/default_avatar.jpg";
 
 //CON FORMULARIO!
 
@@ -13,6 +14,10 @@ const Users = () => {
   const [editedUser, setEditedUser] = useState(null); // Nuevo estado para el usuario editado
   const [showAddUserPopup, setShowAddUserPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isLastnameValid, setIsLastnameValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
 
   const [newUser, setNewUser] = useState({
     image: null,
@@ -46,6 +51,24 @@ const Users = () => {
   const handleAddUserChange = (e) => {
     const { name, value } = e.target;
     setNewUser((prevUser) => ({ ...prevUser, [name]: value }));
+
+    // Validaciones adicionales
+    if (name === "firstName") {
+      setIsNameValid(value.trim() !== "" || !showAddUserPopup); // Marcar en rojo solo si está vacío y se está editando
+    } else if (name === "lastName") {
+      setIsLastnameValid(value.trim() !== "" || !showAddUserPopup); // Marcar en rojo solo si está vacío y se está editando
+    } else if (name === "email") {
+      // Validar el formato del correo electrónico
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setIsEmailValid(
+        (value.trim() === "" || emailRegex.test(value)) || !showAddUserPopup
+      ); // Marcar en rojo solo si está vacío o el formato es inválido y se está editando
+    } else if (name === "password") {
+      setIsPasswordValid(
+        (value.length >= 6 || value.trim() === "") || !showAddUserPopup
+      ); // Marcar en rojo solo si la longitud es inferior a 6 y se está editando
+    }
+
   };
 
   useEffect(() => {
@@ -61,6 +84,36 @@ const Users = () => {
 
   const handleAddUserSubmit = async (e) => {
     e.preventDefault();
+     // Validar antes de enviar la solicitud
+    if (!newUser.firstName.trim()) {
+      setIsNameValid(false);
+    }
+
+    if (!newUser.lastName.trim()) {
+      setIsLastnameValid(false);
+    }
+
+    // Validar el formato del correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!newUser.email.trim() || !emailRegex.test(newUser.email)) {
+      setIsEmailValid(false);
+    }
+
+    // Validar la longitud de la contraseña
+    if (newUser.password.trim().length < 6) {
+      setIsPasswordValid(false);
+    }
+
+    if (!newUser.image) {
+      console.error("No se proporcionó una imagen, se usará la imagen por defecto.");
+      newUser.image = avatarImage;
+    }
+
+
+    // Si alguna validación falla, no enviar la solicitud
+    if (!isNameValid || !isLastnameValid || !isEmailValid || !isPasswordValid) {
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -74,7 +127,7 @@ const Users = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(newUser),
+          body: JSON.stringify( newUser ),
         }
       );
 
@@ -138,6 +191,27 @@ const Users = () => {
       });
   }, []);
 
+  const handleAddUserCancel = () => {
+    // Restablecer el formulario al estado inicial
+    setNewUser({
+      image: null,
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      role: "PLAYER",
+    });
+
+    // Restablecer las validaciones
+    setIsNameValid(true);
+    setIsLastnameValid(true);
+    setIsEmailValid(true);
+    setIsPasswordValid(true);
+
+    // Ocultar el popup
+    setShowAddUserPopup(false);
+  };
+
   const { theme } = useContext(ThemeContext);
 
   return (
@@ -175,42 +249,68 @@ const Users = () => {
               <input
                 type="text"
                 name="firstName"
-                value={newUser.firstName}
+                // value={newUser.firstName}
                 onChange={handleAddUserChange}
+                style={{ borderColor: isNameValid ? "" : "red" }}
               />
+               {!isNameValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  El nombre es obligatorio.
+                </div>
+              )}
             </label>
             <label>
               Apellido:
               <input
                 type="text"
                 name="lastName"
-                value={newUser.lastName}
+                // value={newUser.lastName}
                 onChange={handleAddUserChange}
+                style={{ borderColor: isLastnameValid ? "" : "red" }}
               />
+               {!isLastnameValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  El apellido es obligatorio.
+                </div>
+              )}
             </label>
             <label>
               Email:
               <input
                 type="email"
                 name="email"
-                value={newUser.email}
+                // value={newUser.email}
                 onChange={handleAddUserChange}
+                style={{ borderColor: isEmailValid ? "" : "red" }}
               />
+              {!isEmailValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  {newUser.email.trim() === ""
+                    ? "El correo electrónico es obligatorio."
+                    : "Formato de correo electrónico inválido."}
+                </div>
+              )}
             </label>
             <label>
               Password:
               <input
                 type="password"
                 name="password"
-                value={newUser.password}
+                // value={newUser.password}
                 onChange={handleAddUserChange}
+                style={{ borderColor: isPasswordValid ? "" : "red" }}
               />
+              {!isPasswordValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  La contraseña debe tener al menos 6 caracteres.
+                </div>
+              )}
             </label>
             <label>
               Tipo de Usuario:
               <select
                 name="role"
-                value={newUser.role}
+                // value={newUser.role}
                 onChange={handleAddUserChange}
               >
                 <option value="Player">Player</option>
@@ -219,7 +319,7 @@ const Users = () => {
             </label>
             <button type="submit">Agregar</button>
           </form>
-          <button onClick={() => setShowAddUserPopup(false)}>Cancelar</button>
+          <button onClick={handleAddUserCancel}>Cancelar</button>
         </div>
       )}
     </>
