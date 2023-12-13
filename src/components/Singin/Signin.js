@@ -15,9 +15,10 @@ const Signin = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [signInError, setSignInError] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para el spinner
+
   const { setRole } = useContext(RoleContext);
   const { setToken } = useContext(RoleContext);
-
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -51,7 +52,7 @@ const Signin = () => {
       return;
     }
 
-    // Tu lógica de inicio de sesión aquí
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/api/User/authorization`, {
@@ -104,13 +105,17 @@ const Signin = () => {
         }
       } else {
         const errorText = await response.text();
-    
+
         if (response.status === 401) {
           // Usuario no autorizado (credenciales incorrectas)
-          setSignInError("Usuario o contraseña incorrectos, intente nuevamente");
+          setSignInError(
+            "Usuario o contraseña incorrectos, intente nuevamente"
+          );
         } else if (response.status === 404) {
           // Usuario no encontrado en la base de datosb
-          setSignInError("El usuario no existe. Si no tiene una cuenta, puede registrarse.");
+          setSignInError(
+            "El usuario no existe. Si no tiene una cuenta, puede registrarse."
+          );
         } else {
           // Otro tipo de error no manejado específicamente
           setSignInError("Error en el inicio de sesión. Intente nuevamente.");
@@ -118,8 +123,13 @@ const Signin = () => {
         }
       }
     } catch (error) {
-      setSignInError("Ocurrió un error en el inicio de sesión. Intente nuevamente.");
+      setSignInError(
+        "Ocurrió un error en el inicio de sesión. Intente nuevamente."
+      );
       console.error("Error en la solicitud:", error);
+    } finally {
+      // Finaliza la carga
+      setIsLoading(false);
     }
   };
 
@@ -166,26 +176,26 @@ const Signin = () => {
         )}
       </div>
       {signInError && <p className="error-message">{signInError}</p>}
-      
+
       <button className="signin-button" type="button" onClick={signInHandler}>
-        Ingresar
+        {isLoading ? "Ingresando..." : "Ingresar"}
       </button>
       <p>
-  ¿No tenés una cuenta?{" "}
-  <a href="#" onClick={buttonNavigateSignin}>
-    ¡Registrate!
-  </a>
-</p>
+        ¿No tenés una cuenta?{" "}
+        <a href="#" onClick={buttonNavigateSignin}>
+          ¡Registrate!
+        </a>
+      </p>
       <p>
-  ¿Tenés canchas para alquilar?{" "}
-  <a
-    href="https://forms.gle/SyaMTya5DL83Mwyd7"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    ¡Contactanos!
-  </a>
-</p>
+        ¿Tenés canchas para alquilar?{" "}
+        <a
+          href="https://forms.gle/SyaMTya5DL83Mwyd7"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ¡Contactanos!
+        </a>
+      </p>
     </div>
   );
 };

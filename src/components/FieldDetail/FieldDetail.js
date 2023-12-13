@@ -8,8 +8,17 @@ import { jwtDecode } from "jwt-decode";
 import { ThemeContext } from "../../services/theme.context";
 
 const FieldDetail = (props) => {
-  const { name, location, image, description, sport, lockerRoom, bar, price } =
-    props;
+  const {
+    name,
+    location,
+    image,
+    description,
+    sport,
+    lockerRoom,
+    bar,
+    price,
+    userId,
+  } = props;
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,6 +33,7 @@ const FieldDetail = (props) => {
   const [editedLockerRoom, setEditedLockerRoom] = useState("");
   const [editedBar, setEditedBar] = useState("");
   const [editedPrice, setEditedPrice] = useState("");
+  const [editedUserId, setEditedUserId] = useState("");
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -106,6 +116,14 @@ const FieldDetail = (props) => {
   }
   };
 
+  const navitateDashboard = () => {
+    if (role === "ADMIN") {
+      navigate("/allFields");
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   const handleCancelReservation = () => {
     setShowConfirmation(false);
   };
@@ -116,10 +134,11 @@ const FieldDetail = (props) => {
     setIsEditing(true);
   };
 
-  // Editar cancha PUT
+  // Editar cancha PUT OWNER
 
-  const handleSaveClick = () => {
+  const handleSaveClickOwner = () => {
     const token = localStorage.getItem("token");
+
     fetch(`${API_URL}/api/Field/${id}/edit`, {
       method: "PUT",
       headers: {
@@ -161,7 +180,54 @@ const FieldDetail = (props) => {
       });
   };
 
-  const handleInputChange = (e) => {
+  // Editar cancha PUT ADMIN
+
+  const handleSaveClickAdmin = () => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${API_URL}/api/Field/${id}/edit-admin`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id: id,
+        name: editedName,
+        location: editedLocation,
+        image: editedImage,
+        description: editedDescription,
+        lockerRoom: editedLockerRoom,
+        bar: editedBar,
+        price: editedPrice,
+        sport: editedSport,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(
+              `HTTP error! Status: ${response.status}, Message: ${error}`
+            );
+          });
+        }
+        if (response.status === 204) {
+          console.log("Edición exitosa");
+          console.log("respuestaaaaa", response);
+          setIsEditing(false);
+        }
+        return response.json();
+      })
+      .then((updatedFieldData) => {
+        setIsEditing(false);
+        setField(updatedFieldData);
+      })
+      .catch((error) => {
+        console.error("Error updating field data:", error.message);
+      });
+  };
+
+  const handleInputChangeOwner = (e) => {
     if (e.target.name === "name") {
       setEditedName(e.target.value);
     } else if (e.target.name === "location") {
@@ -178,6 +244,28 @@ const FieldDetail = (props) => {
       setEditedBar(e.target.value);
     } else if (e.target.name === "price") {
       setEditedPrice(e.target.value);
+    }
+  };
+
+  const handleInputChangeAdmin = (e) => {
+    if (e.target.name === "name") {
+      setEditedName(e.target.value);
+    } else if (e.target.name === "location") {
+      setEditedLocation(e.target.value);
+    } else if (e.target.name === "image") {
+      setEditedImage(e.target.value);
+    } else if (e.target.name === "description") {
+      setEditedDescription(e.target.value);
+    } else if (e.target.name === "sport") {
+      setEditedSport(e.target.value);
+    } else if (e.target.name === "lockerRoom") {
+      setEditedLockerRoom(e.target.value);
+    } else if (e.target.name === "bar") {
+      setEditedBar(e.target.value);
+    } else if (e.target.name === "price") {
+      setEditedPrice(e.target.value);
+    } else if (e.target.name === "userId") {
+      setEditedUserId(e.target.value);
     }
   };
 
@@ -207,6 +295,7 @@ const FieldDetail = (props) => {
         setEditedLockerRoom(fieldData.lockerRoom);
         setEditedBar(fieldData.bar);
         setEditedPrice(fieldData.price);
+        setEditedUserId(fieldData.userId);
         setField(fieldData);
       })
       .catch((error) => {
@@ -223,6 +312,15 @@ const FieldDetail = (props) => {
     sportName = "Tenis";
   }
 
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    if (name === "lockerRoom") {
+      setEditedLockerRoom(checked);
+    } else if (name === "bar") {
+      setEditedBar(checked);
+    }
+  };
+
   const { theme } = useContext(ThemeContext);
   return (
     <>
@@ -238,61 +336,152 @@ const FieldDetail = (props) => {
         <img src={image} alt={name} className="field-image" />
         <div className="field-info">
           <h2> {editedName}</h2>
-          {isEditing ? (
+
+          {isEditing && role === "OWNER" && (
             <div>
-              <label>Cambia tu foto de perfil:</label>
+              <label>Imagen de la cancha:</label>
               <input
                 type="text"
                 name="image"
                 value={editedImage}
-                onChange={handleInputChange}
+                onChange={handleInputChangeOwner}
               />
+
               <label>Ubicación:</label>
               <input
                 type="text"
                 name="location"
                 value={editedLocation}
-                onChange={handleInputChange}
+                onChange={handleInputChangeOwner}
               />
+
               <label>Descripción:</label>
               <input
                 type="text"
                 name="description"
                 value={editedDescription}
-                onChange={handleInputChange}
+                onChange={handleInputChangeOwner}
               />
+
               <label>Deporte:</label>
-              <input
-                type="text"
+              <select
                 name="sport"
                 value={editedSport}
-                onChange={handleInputChange}
-              />
+                onChange={handleInputChangeOwner}
+              >
+                <option value="">Seleccionar Deporte</option>
+                <option value="0">Fútbol</option>
+                <option value="1">Vóley</option>
+                <option value="2">Tenis</option>
+              </select>
+
               <label>Vestuarios:</label>
               <input
-                type="text"
+                type="checkbox"
                 name="lockerRoom"
-                value={editedLockerRoom}
-                onChange={handleInputChange}
+                checked={editedLockerRoom}
+                onChange={handleCheckboxChange}
               />
+
               <label>Bar:</label>
               <input
-                type="text"
+                type="checkbox"
                 name="bar"
-                value={editedBar}
-                onChange={handleInputChange}
+                checked={editedBar}
+                onChange={handleCheckboxChange}
               />
+
               <label>Precio:</label>
               <input
                 type="text"
                 name="price"
                 value={editedPrice}
-                onChange={handleInputChange}
+                onChange={handleInputChangeOwner}
               />
-              <button onClick={handleSaveClick}>Guardar</button>
-              <button onClick={buttonCancelEdit}>Cancelar</button>
+              <div className="botones">
+                <button className="boton-verde" onClick={handleSaveClickOwner}>
+                  Guardar
+                </button>
+                <button className="cancelar" onClick={buttonCancelEdit}>
+                  Cancelar
+                </button>
+              </div>
             </div>
-          ) : (
+          )}
+
+          {isEditing && role === "ADMIN" && (
+            <div>
+              <label>Imagen de la cancha:</label>
+              <input
+                type="text"
+                name="image"
+                value={editedImage}
+                onChange={handleInputChangeAdmin}
+              />
+
+              <label>Ubicación:</label>
+              <input
+                type="text"
+                name="location"
+                value={editedLocation}
+                onChange={handleInputChangeAdmin}
+              />
+
+              <label>Descripción:</label>
+              <input
+                type="text"
+                name="description"
+                value={editedDescription}
+                onChange={handleInputChangeAdmin}
+              />
+
+              <label>Deporte:</label>
+              <select
+                name="sport"
+                value={editedSport}
+                onChange={handleInputChangeAdmin}
+              >
+                <option value="">Seleccionar Deporte</option>
+                <option value="0">Fútbol</option>
+                <option value="1">Vóley</option>
+                <option value="2">Tenis</option>
+              </select>
+
+              <label>Vestuarios:</label>
+              <input
+                type="checkbox"
+                name="lockerRoom"
+                checked={editedLockerRoom}
+                onChange={handleCheckboxChange}
+              />
+
+              <label>Bar:</label>
+              <input
+                type="checkbox"
+                name="bar"
+                checked={editedBar}
+                onChange={handleCheckboxChange}
+              />
+
+              <label>Precio:</label>
+              <input
+                type="text"
+                name="price"
+                value={editedPrice}
+                onChange={handleInputChangeAdmin}
+              />
+              <div className="botones">
+                <button className="boton-verde" onClick={handleSaveClickAdmin}>
+                  Guardar
+                </button>
+                <button className="cancelar" onClick={buttonCancelEdit}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
+
+          {!isEditing && (
             <div>
               <img src={editedImage} alt={editedName} className="field-image" />
               <p>
@@ -313,8 +502,16 @@ const FieldDetail = (props) => {
               <p>
                 <strong>Precio: </strong> $ {editedPrice}
               </p>
+              {role === "ADMIN" && (
+                <p>
+                  <strong>Id de propietario: </strong> {editedUserId}
+                </p>
+              )}
+              <button className="atras" onClick={navitateDashboard}>
+                Atrás
+              </button>
               {(role === "OWNER" || role === "ADMIN") && (
-                <button className="edit-button" onClick={handleEditClick}>
+                <button className="editar" onClick={handleEditClick}>
                   Editar
                 </button>
               )}

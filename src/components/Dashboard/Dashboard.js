@@ -79,9 +79,8 @@ const Dashboard = () => {
 
       if (!newField.image) {
         console.error("Ingrese una imagen.");
-        return
+        return;
       }
-
 
       // Asegúrate de que el campo 'Name' tenga un valor
       if (!newField.name) {
@@ -92,10 +91,12 @@ const Dashboard = () => {
       if (!newField.location) {
         console.error("Ingrese una ubicación antes de enviar la solicitud.");
         return;
-      } 
+      }
 
       if (!newField.description) {
-        console.warn("No se proporcionó una descripción, se usará 'sin descripción'.");
+        console.warn(
+          "No se proporcionó una descripción, se usará 'sin descripción'."
+        );
         newField.description = "sin descripción";
       }
 
@@ -120,6 +121,7 @@ const Dashboard = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            UserId: selectedUserId, // Agregamos UserId al cuerpo de la solicitud
             Name: newField.name,
             Location: newField.location,
             Image: newField.image,
@@ -240,10 +242,12 @@ const Dashboard = () => {
       return text;
     }
 
-    const regex = new RegExp(`(${searchTerm})`, 'gi');
-    return text.split(regex).map((part, index) =>
-      regex.test(part) ? <mark key={index}>{part}</mark> : part
-    );
+    const regex = new RegExp(`(${searchTerm})`, "gi");
+    return text
+      .split(regex)
+      .map((part, index) =>
+        regex.test(part) ? <mark key={index}>{part}</mark> : part
+      );
   };
 
   return (
@@ -264,25 +268,33 @@ const Dashboard = () => {
         >
           {role === "ADMIN" && (
             <>
-              <Search onSearchChange={handleSearchChange}/>
+              <Search onSearchChange={handleSearchChange} />
               <button id="add-field-button" onClick={handleAddFieldClick}>
                 Agregar Cancha
               </button>
             </>
           )}
-          {role !== "ADMIN" && <Search onSearchChange={handleSearchChange}/>}
+          {role !== "ADMIN" && <Search onSearchChange={handleSearchChange} />}
           {role === "OWNER" && (
             <>
-            <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
-              Mis Canchas
-            </h3>
-            <a href="https://forms.gle/eEvQKMMGp3r92jrQ8" target="_blank" rel="noopener noreferrer">
-              Solicitud para agregar cancha
-            </a>
-            <br />
-            <a href="https://forms.gle/gxes8gnC9jF3JEcG9" target="_blank" rel="noopener noreferrer">
-              Solicitud para eliminar cancha
-            </a>
+              <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+                Mis Canchas
+              </h3>
+              <a
+                href="https://forms.gle/eEvQKMMGp3r92jrQ8"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Solicitud para agregar cancha
+              </a>
+              <br />
+              <a
+                href="https://forms.gle/gxes8gnC9jF3JEcG9"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Solicitud para eliminar cancha
+              </a>
             </>
           )}
           <div className="flex-fields">
@@ -323,7 +335,6 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="name"
-                  // value={newField.name}
                   onChange={handleAddFieldChange}
                   style={{
                     borderColor: !newField.name ? "red" : "",
@@ -336,7 +347,6 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="location"
-                  // value={newField.location}
                   onChange={handleAddFieldChange}
                   style={{
                     borderColor: !newField.location ? "red" : "",
@@ -348,7 +358,6 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="description"
-                  // value={newField.description}
                   onChange={handleAddFieldChange}
                   style={{
                     borderColor: !newField.description ? "red" : "",
@@ -376,7 +385,6 @@ const Dashboard = () => {
                 <input
                   type="checkbox"
                   name="lockerRoom"
-                  // value={newField.lockerRoom}
                   onChange={handleAddFieldChange}
                 />
               </label>
@@ -385,7 +393,6 @@ const Dashboard = () => {
                 <input
                   type="checkbox"
                   name="bar"
-                  // value={newField.bar}
                   onChange={handleAddFieldChange}
                 />
               </label>
@@ -394,10 +401,12 @@ const Dashboard = () => {
                 <input
                   type="text"
                   name="price"
-                  // value={newField.price}
                   onChange={handleAddFieldChange}
                   style={{
-                    borderColor: !newField.price || parseFloat(newField.price) < 0 ? "red" : "",
+                    borderColor:
+                      !newField.price || parseFloat(newField.price) < 0
+                        ? "red"
+                        : "",
                   }}
                 />
               </label>
@@ -405,7 +414,6 @@ const Dashboard = () => {
                 ID de Usuario:
                 <select
                   name="userId"
-                  // value={selectedUserId}
                   onChange={(e) => setSelectedUserId(e.target.value)}
                   style={{
                     borderColor: !selectedUserId ? "red" : "",
@@ -415,14 +423,19 @@ const Dashboard = () => {
 
                   {ownerUsers.map((user) => (
                     <option key={user.id} value={user.id}>
-                      {user.id}
+                      {user.id} - {user.firstName} {user.lastName}
                     </option>
                   ))}
                 </select>
               </label>
-              <button type="submit">Agregar</button>
+              <button className="boton-verde" type="submit">
+                Agregar
+              </button>
             </form>
-            <button onClick={() => setShowAddFieldPopup(false)}>
+            <button
+              className="cancelar"
+              onClick={() => setShowAddFieldPopup(false)}
+            >
               Cancelar
             </button>
           </div>
