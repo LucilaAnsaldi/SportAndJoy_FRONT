@@ -235,6 +235,17 @@ const Dashboard = () => {
     setFields(filteredFields);
   };
 
+  const highlightMatches = (text) => {
+    if (!searchTerm) {
+      return text;
+    }
+
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text.split(regex).map((part, index) =>
+      regex.test(part) ? <mark key={index}>{part}</mark> : part
+    );
+  };
+
   return (
     <>
       <Header />
@@ -278,7 +289,11 @@ const Dashboard = () => {
             {filteredFields.map((field) => (
               <FieldCard
                 key={field.id}
-                field={field}
+                field={{
+                  ...field,
+                  name: highlightMatches(field.name),
+                  location: highlightMatches(field.location),
+                }}
                 onCardClick={handleCardClick}
               />
             ))}

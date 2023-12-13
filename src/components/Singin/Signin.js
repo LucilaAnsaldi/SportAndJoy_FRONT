@@ -14,6 +14,7 @@ const Signin = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [signInError, setSignInError] = useState("");
   const { setRole } = useContext(RoleContext);
   const { setToken } = useContext(RoleContext);
 
@@ -102,9 +103,22 @@ const Signin = () => {
           console.error("Error al analizar la respuesta JSON:", jsonError);
         }
       } else {
-        console.log("Error en el inicio de sesión:", await response.text());
+        const errorText = await response.text();
+    
+        if (response.status === 401) {
+          // Usuario no autorizado (credenciales incorrectas)
+          setSignInError("Usuario o contraseña incorrectos, intente nuevamente");
+        } else if (response.status === 404) {
+          // Usuario no encontrado en la base de datosb
+          setSignInError("El usuario no existe. Si no tiene una cuenta, puede registrarse.");
+        } else {
+          // Otro tipo de error no manejado específicamente
+          setSignInError("Error en el inicio de sesión. Intente nuevamente.");
+          console.log("Error en el inicio de sesión:", errorText);
+        }
       }
     } catch (error) {
+      setSignInError("Ocurrió un error en el inicio de sesión. Intente nuevamente.");
       console.error("Error en la solicitud:", error);
     }
   };
@@ -151,6 +165,8 @@ const Signin = () => {
           </p>
         )}
       </div>
+      {signInError && <p className="error-message">{signInError}</p>}
+      
       <button className="signin-button" type="button" onClick={signInHandler}>
         Ingresar
       </button>

@@ -172,6 +172,12 @@ const Reservations = () => {
       console.error("Error en la solicitud:", error);
     }
   };
+  const highlightMatches = (text) => {
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text.split(regex).map((part, index) =>
+      regex.test(part) ? <mark key={index}>{part}</mark> : part
+    );
+  };
 
   return (
     <>
@@ -192,7 +198,17 @@ const Reservations = () => {
               reservation.field.location.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((reservation) => (
-              <ReservationCard key={reservation.id} reservation={reservation} />
+              <ReservationCard 
+              key={reservation.id}
+              reservation={{
+              ...reservation,
+              field: {
+              ...reservation.field,
+              name: searchTerm ? highlightMatches(reservation.field.name) : reservation.field.name,
+              location: searchTerm ? highlightMatches(reservation.field.location) : reservation.field.location,
+          },
+        }}
+              />
             ))}
       </div>
 
