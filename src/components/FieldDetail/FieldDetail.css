@@ -104,6 +104,10 @@
   background-color: #005678;
 }
 
+.accept:disabled {
+  background-color: #a1a0a0;
+}
+
 .field-detail:hover {
   transform: scale(1);
 }
@@ -128,6 +132,7 @@
   margin-bottom: 15px;
 }
 
+
 .calendar-container {
   margin-bottom: 15px;
 }
@@ -151,4 +156,13 @@
 .button-container {
   display: flex;
   justify-content: center;
+}
+
+.custom-popup {
+  background-color: #ff4d4d; /* Fondo rojo */
+  border: 2px solid #000; /* Bordes negros */
+}
+
+.custom-popup p {
+  color: #000; /* Color del texto negro */
 }

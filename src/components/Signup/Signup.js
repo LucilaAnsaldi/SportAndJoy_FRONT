@@ -11,15 +11,19 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [nameError, setNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+  const [passwordConditions, setPasswordConditions] = useState([]);
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const lastNameRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
 
   const navigate = useNavigate();
   const buttonNavigateSignup = () => {
@@ -40,25 +44,50 @@ const Signup = () => {
   };
 
   const validatePassword = () => {
-    setPasswordError(password.length < 6);
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    setPasswordError(!passwordPattern.test(password));
+
+    const conditions = [];
+    if (password.length < 6) {
+      conditions.push("Al menos 6 caracteres");
+    }
+    if (!/\d/.test(password)) {
+      conditions.push("Al menos un número");
+    }
+    if (!/[A-Za-z]/.test(password)) {
+      conditions.push("Al menos una letra");
+    }
+    if (!/[@$!%*?&]/.test(password)) {
+      conditions.push("Al menos un carácter especial");
+    }
+
+    setPasswordConditions(conditions);
   };
+
+  const validateConfirmPassword = () => {
+    setConfirmPasswordError(confirmPassword !== password);
+  };
+
+
 
   const signUpHandler = async () => {
     validateName();
+    validateLastName();
     validateEmail();
     validatePassword();
-    validateLastName();
+    validateConfirmPassword();
 
-    if (nameError || emailError || passwordError || lastNameError) {
+    if (nameError || emailError || passwordError || lastNameError || confirmPasswordError) {
       return;
     }
 
-    if (name === "" || email === "" || password === "" || lastName === "") {
+    if (name === "" || email === "" || password === "" || lastName === "" || confirmPassword === "" ) {
       // Si algún campo está vacío, muestra el mensaje de error
       setNameError(true);
       setEmailError(true);
       setPasswordError(true);
       setLastNameError(true);
+      setConfirmPasswordError(true);
       return;
     }
 
@@ -164,24 +193,55 @@ const Signup = () => {
           type="password"
           ref={passwordRef}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            validatePassword();
+          }}
           onBlur={validatePassword}
         />
+        {passwordConditions.length > 0 && (
+          <div className="password-conditions">
+            <p className="error-message">Condiciones de la contraseña:</p>
+            <ul>
+              {passwordConditions.map((condition, index) => (
+                <li key={index}>{condition}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         {passwordError && (
           <p className="error-message">
-            La contraseña debe tener al menos 6 caracteres
+            La contraseña no cumple con los requisitos.
           </p>
+        )}
+      </div>
+      <div className="input-container">
+        <label className="label">Confirmar Contraseña</label>
+        <input
+          className={`input ${confirmPasswordError ? "error" : ""}`}
+          placeholder=""
+          type="password"
+          ref={confirmPasswordRef}
+          value={confirmPassword}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            validateConfirmPassword();
+          }}
+          onBlur={validateConfirmPassword}
+        />
+        {confirmPasswordError && (
+          <p className="error-message">Las contraseñas no coinciden</p>
         )}
       </div>
       <button className="signin-button" type="button" onClick={signUpHandler}>
         Registrarse
       </button>
       <p>
-  ¿Ya tenés una cuenta?{" "}
-  <a href="#" onClick={buttonNavigateSignup}>
-  ¡Iniciá Sesión!
-  </a>
-</p>
+      ¿Ya tenés una cuenta?{" "}
+      <a href="#" onClick={buttonNavigateSignup}>
+      ¡Iniciá Sesión!
+      </a>
+    </p>
     </div>
   );
 };

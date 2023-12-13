@@ -29,6 +29,8 @@ const FieldDetail = (props) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [fieldData, setField] = useState({});
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [reservationError, setReservationError] = useState(null);
+
 
   const handleReserveClick = () => {
     setShowConfirmation(true);
@@ -88,14 +90,20 @@ const FieldDetail = (props) => {
       if (response.ok) {
         console.log("Reserva exitosa");
         navigate("/dashboard");
-      } else {
-        console.error("Error al realizar la reserva");
-      }
-
-      setShowConfirmation(false);
-    } catch (error) {
-      console.error("Error al realizar la reserva:", error);
+      } else if (response.status === 400) {
+      const errorMessage = await response.text();
+      console.error("Error al realizar la reserva:", errorMessage);
+      setReservationError(errorMessage);
+    } else {
+      console.error("Error al realizar la reserva:", response.statusText);
+      setReservationError("Error desconocido al realizar la reserva.");
     }
+
+    setShowConfirmation(false);
+  } catch (error) {
+    console.error("Error al realizar la reserva:", error);
+    setReservationError("Error desconocido al realizar la reserva.");
+  }
   };
 
   const handleCancelReservation = () => {
@@ -342,9 +350,23 @@ const FieldDetail = (props) => {
                       }
                     />
                   </div>
+                  {selectedDate < new Date() &&(
+                    <p>Podés seleccionar una fecha a partir de hoy</p>
+                  )}
                   <div className="button-container">
-                    <button onClick={handleConfirmReservation}>Aceptar</button>
+                    <button className= "accept" onClick={handleConfirmReservation}
+                      disabled={selectedDate < new Date()}>
+                      Aceptar</button>
                     <button onClick={handleCancelReservation}>Cancelar</button>
+                  </div>
+                </div>
+              )}
+                {reservationError && (
+                <div className="popup-container">
+                  <div className={`popup ${theme === "dark" ? "popup-dark" : ""} custom-popup`}>
+                    <p>Oops! Hay un problema ...</p>
+                    <p>{reservationError}</p>
+                    <button onClick={() => setReservationError(null)}>Cerrar</button>
                   </div>
                 </div>
               )}
