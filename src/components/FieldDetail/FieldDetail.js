@@ -30,7 +30,6 @@ const FieldDetail = (props) => {
   const [fieldData, setField] = useState({});
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-
   const handleReserveClick = () => {
     setShowConfirmation(true);
   };
@@ -68,7 +67,6 @@ const FieldDetail = (props) => {
     setShowDeleteConfirmation(false);
   };
 
- 
   const handleConfirmReservation = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -89,6 +87,7 @@ const FieldDetail = (props) => {
 
       if (response.ok) {
         console.log("Reserva exitosa");
+        navigate("/dashboard");
       } else {
         console.error("Error al realizar la reserva");
       }
@@ -102,7 +101,6 @@ const FieldDetail = (props) => {
   const handleCancelReservation = () => {
     setShowConfirmation(false);
   };
-
 
   // EDITAR
 
@@ -129,7 +127,7 @@ const FieldDetail = (props) => {
         lockerRoom: editedLockerRoom,
         bar: editedBar,
         price: editedPrice,
-        sport: editedSport
+        sport: editedSport,
       }),
     })
       .then((response) => {
@@ -171,13 +169,13 @@ const FieldDetail = (props) => {
     } else if (e.target.name === "bar") {
       setEditedBar(e.target.value);
     } else if (e.target.name === "price") {
-      setEditedPrice(e.target.value); }
+      setEditedPrice(e.target.value);
+    }
   };
 
   const buttonCancelEdit = () => {
     setIsEditing(false);
   };
-
 
   // Traer Cancha GET
 
@@ -307,11 +305,11 @@ const FieldDetail = (props) => {
               <p>
                 <strong>Precio: </strong> $ {editedPrice}
               </p>
-              { (role === "OWNER" || role === "ADMIN") && (
-                  <button className="edit-button" onClick={handleEditClick}>
-                    Editar
-                  </button>
-                )}
+              {(role === "OWNER" || role === "ADMIN") && (
+                <button className="edit-button" onClick={handleEditClick}>
+                  Editar
+                </button>
+              )}
               {role === "ADMIN" && (
                 <button className="delete-button" onClick={handleDeleteField}>
                   Eliminar
@@ -330,24 +328,26 @@ const FieldDetail = (props) => {
                 </button>
               )}
               {showConfirmation && (
-  <div className={theme === "dark" ? "popup-dark" : "popup"}>
-    <p>Seleccione la fecha de reserva de su cancha:</p>
-    <div className="calendar-container">
-      <label htmlFor="date">Fecha:</label>
-      <input
-        type="date"
-        id="date"
-        name="date"
-        value={selectedDate.toISOString().split("T")[0]}
-        onChange={(e) => setSelectedDate(new Date(e.target.value))}
-      />
-    </div>
-    <div className="button-container">
-      <button onClick={handleConfirmReservation}>Aceptar</button>
-      <button onClick={handleCancelReservation}>Cancelar</button>
-    </div>
-  </div>
-)}
+                <div className={theme === "dark" ? "popup-dark" : "popup"}>
+                  <p>Seleccione la fecha de reserva de su cancha:</p>
+                  <div className="calendar-container">
+                    <label htmlFor="date">Fecha:</label>
+                    <input
+                      type="date"
+                      id="date"
+                      name="date"
+                      value={selectedDate.toISOString().split("T")[0]}
+                      onChange={(e) =>
+                        setSelectedDate(new Date(e.target.value))
+                      }
+                    />
+                  </div>
+                  <div className="button-container">
+                    <button onClick={handleConfirmReservation}>Aceptar</button>
+                    <button onClick={handleCancelReservation}>Cancelar</button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -130,7 +130,9 @@ const Reservations = () => {
     setShowCreateForm(!showCreateForm);
   };
 
-  const handleCreateReservation = async () => {
+  const handleCreateReservation = async (e) => {
+    e.preventDefault();
+
     try {
       if (!selectedUserId) {
         console.error("Por favor, selecciona un usuario.");
@@ -157,7 +159,12 @@ const Reservations = () => {
 
       if (response.ok) {
         console.log("Reserva creada exitosamente");
-        navigate("/reservations"); // Reemplaza "/ruta-de-tu-pagina" con la ruta de tu página actual
+        const createdReservation = await response.json();
+        setReservations((prevReservations) => [
+          ...prevReservations,
+          createdReservation,
+        ]);
+        setShowCreateForm(false);
       } else {
         console.error("Error al crear la reserva:", await response.text());
       }

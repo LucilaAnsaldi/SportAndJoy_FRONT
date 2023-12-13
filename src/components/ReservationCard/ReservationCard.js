@@ -59,6 +59,8 @@ const ReservationCard = ({ reservation }) => {
     return null;
   }
 
+  // ...
+
   return (
     <div
       className={
@@ -66,9 +68,14 @@ const ReservationCard = ({ reservation }) => {
       }
     >
       <div className="reservation-details">
-        <h3>Cancha: {reservation.field.name}</h3>
-        <p>Ubicacion: {reservation.field.location}</p>
-        <p>Fecha: {reservation.date.slice(0, 10)}</p>
+        <h3>Cancha: {reservation.field?.name || "Nombre no disponible"}</h3>
+        <p>
+          Ubicacion: {reservation.field?.location || "Ubicación no disponible"}
+        </p>
+        <p>Fecha: {reservation.date?.slice(0, 10) || "Fecha no disponible"}</p>
+        <p>
+          Usuario: {reservation.user?.firstName} {reservation.user?.lastName}
+        </p>
       </div>
       <button onClick={handleCancel} className="cancel-button">
         Cancelar

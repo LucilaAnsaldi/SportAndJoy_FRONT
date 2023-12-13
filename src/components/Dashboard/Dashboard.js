@@ -49,60 +49,62 @@ const Dashboard = () => {
 
   const handleAddFieldClick = () => {
     setShowAddFieldPopup(true);
-
   };
 
   const handleAddFieldChange = (e) => {
     const { name, value, type, checked } = e.target;
 
     // Para manejar checkboxes correctamente
-  const fieldValue = type === 'checkbox' ? checked : value;
+    const fieldValue = type === "checkbox" ? checked : value;
 
-  setNewField((prevField) => ({
-    ...prevField,
-    [name]: type === 'checkbox' ? checked : fieldValue,
-  }));
+    setNewField((prevField) => ({
+      ...prevField,
+      [name]: type === "checkbox" ? checked : fieldValue,
+    }));
   };
 
-  //POST FIELD 
+  //POST FIELD
 
   const handleAddFieldSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const token = localStorage.getItem("token");
-  
+
       // Asegúrate de que el campo 'sport' tenga un valor seleccionado
       if (!newField.sport) {
         console.error("Seleccione un deporte antes de enviar la solicitud.");
         return;
       }
-  
+
       // Asegúrate de que el campo 'Name' tenga un valor
       if (!newField.name) {
         console.error("Ingrese un nombre antes de enviar la solicitud.");
         return;
       }
-  
-      const response = await fetch(`${API_URL}/api/Field/create-admin?IdUser=${selectedUserId}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          Name: newField.name,
-          Location: newField.location,
-          Image: newField.image,
-          Description: newField.description,
-          LockerRoom: newField.lockerRoom, // Convertir a número
-          Bar: newField.bar, // Convertir a número
-          Price: newField.price,
-          Sport: parseInt(newField.sport), // Asegúrate de que el valor sea un entero
-        }),
-      });
-  
+
+      const response = await fetch(
+        `${API_URL}/api/Field/create-admin?IdUser=${selectedUserId}`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            Name: newField.name,
+            Location: newField.location,
+            Image: newField.image,
+            Description: newField.description,
+            LockerRoom: newField.lockerRoom, // Convertir a número
+            Bar: newField.bar, // Convertir a número
+            Price: newField.price,
+            Sport: parseInt(newField.sport), // Asegúrate de que el valor sea un entero
+          }),
+        }
+      );
+
       if (response.ok) {
         const createdField = await response.json();
         setFields((prevFields) => [...prevFields, createdField]);
@@ -113,15 +115,15 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error en la solicitud:", error);
     }
-    console.log("ESTE OWNER",selectedUserId)
-    console.log(newField.bar)
-    console.log(newField.lockerRoom) //no lee esto
+    console.log("ESTE OWNER", selectedUserId);
+    console.log(newField.bar);
+    console.log(newField.lockerRoom); //no lee esto
   };
 
-//TRAE ID DE OWNERS
+  //TRAE ID DE OWNERS
   useEffect(() => {
     const token = localStorage.getItem("token");
-  
+
     fetch(`${API_URL}/api/User/getall`, {
       headers: {
         Accept: "application/json",
@@ -137,9 +139,6 @@ const Dashboard = () => {
         console.log(error);
       });
   }, []);
-  
-  
-  
 
   ///////GET ALL FIELDS para player y para owner
   const endpoint =
@@ -209,7 +208,6 @@ const Dashboard = () => {
     setFields(filteredFields);
   };
 
-
   return (
     <>
       <Header />
@@ -226,7 +224,7 @@ const Dashboard = () => {
             role === "ADMIN" || role === "OWNER" ? "admin-owner" : "player"
           }`}
         >
-          {(role === "ADMIN" || role === "OWNER") && (
+          {role === "ADMIN" && (
             <>
               <Search onSearchChange={handleSearchChange}/>
               <button id="add-field-button" onClick={handleAddFieldClick}>
@@ -235,6 +233,11 @@ const Dashboard = () => {
             </>
           )}
           {role !== "ADMIN" && role !== "OWNER" && <Search onSearchChange={handleSearchChange}/>}
+          {role === "OWNER" && (
+            <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+              Mis Canchas
+            </h3>
+          )}
           <div className="flex-fields">
             {filteredFields.map((field) => (
               <FieldCard
@@ -290,20 +293,18 @@ const Dashboard = () => {
                 />
               </label>
               <label>
-  Deporte:
-  <select
-    name="sport"
-    value={newField.sport}
-    onChange={handleAddFieldChange}
-  >
-    <option value="" disabled hidden>
-      Seleccione un deporte
-    </option>
-    <option value="0">Fútbol</option>
-    <option value="1">Vóley</option>
-    <option value="2">Tenis</option>
-  </select>
-</label>
+                Deporte:
+                <select
+                  name="sport"
+                  value={newField.sport}
+                  onChange={handleAddFieldChange}
+                >
+                  <option value="">Seleccionar Usuario</option>
+                  <option value="0">Fútbol</option>
+                  <option value="1">Vóley</option>
+                  <option value="2">Tenis</option>
+                </select>
+              </label>
               <label>
                 Vestuarios:
                 <input
@@ -332,19 +333,21 @@ const Dashboard = () => {
                 />
               </label>
               <label>
-              ID de Usuario:
-  <select
-    name="userId"
-    // value={selectedUserId}
-    onChange={(e) => setSelectedUserId(e.target.value)}
-  >
-    {ownerUsers.map((user) => (
-      <option key={user.id} value={user.id}>
-        {user.id}
-      </option>
-    ))}
-  </select>
-</label>
+                ID de Usuario:
+                <select
+                  name="userId"
+                  // value={selectedUserId}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
+                >
+                  <option value="">Seleccionar Usuario</option>
+
+                  {ownerUsers.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.id}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <button type="submit">Agregar</button>
             </form>
             <button onClick={() => setShowAddFieldPopup(false)}>

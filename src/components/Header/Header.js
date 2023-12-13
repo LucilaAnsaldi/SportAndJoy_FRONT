@@ -4,27 +4,22 @@ import { useNavigate } from "react-router-dom";
 import { RoleContext } from "../../services/role.context";
 import { jwtDecode } from "jwt-decode";
 import API_URL from "../../constants/api";
-
 import avatarImage from "../../assets/images/default_avatar.jpg";
-// import { useUser } from "../../services/Authentication/authentication.context";
 
 export const Header = () => {
   const { role } = useContext(RoleContext);
-  console.log("Role:", role); // Agrega esto para depurar
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [userData, setUserData] = useState({});
-
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
   const imageUrl = image ? image : avatarImage;
 
   const buttonNavigateReservations = () => {
     navigate("/reservations");
   };
-  //   const buttonNavigateUsers = () => {
-  //     navigate("/users");
-  // };
+
   const navigateDashboard = () => {
     navigate("/dashboard");
   };
@@ -34,9 +29,20 @@ export const Header = () => {
   };
 
   const handleLogout = () => {
-    // Limpiar el token del localStorage
-  localStorage.removeItem("token");
+    // Muestra el popup de confirmación
+    setShowLogoutConfirmation(true);
+  };
+
+  const handleConfirmLogout = () => {
+    // Limpia el token del localStorage y navega a la página de inicio de sesión
+    localStorage.removeItem("token");
+    setShowLogoutConfirmation(false);
     navigate("/signin");
+  };
+
+  const handleCancelLogout = () => {
+    // Cancela la acción de cerrar sesión y oculta el popup
+    setShowLogoutConfirmation(false);
   };
 
   useEffect(() => {
@@ -46,7 +52,6 @@ export const Header = () => {
       try {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.sub;
-
 
         // Realiza la solicitud al servidor para obtener los datos del usuario
         fetch(`${API_URL}/api/User/get/${userId}`, {
@@ -64,14 +69,12 @@ export const Header = () => {
           })
           .catch((error) => {
             console.log(error);
-
           });
       } catch (error) {
         console.error("Error al decodificar el token:", error);
       }
     }
   }, []); // Asegúrate de que este sea un arreglo vacío
-  
 
   return (
     <div className="header">
@@ -79,7 +82,6 @@ export const Header = () => {
         Sport&Joy
       </button>
       {role === "ADMIN" ? (
-        // Si el usuario es admin, mostrar el botón y el icono de usuario
         <div className="user">
           <img
             className="user-picture"
@@ -88,17 +90,14 @@ export const Header = () => {
             onClick={buttonNavigateProfile}
           />
           <button className="user-button" onClick={buttonNavigateProfile}>
-            {name} 
+            {name}
           </button>
         </div>
       ) : role === "OWNER" ? (
-        // Si el usuario no es admin, mostrar el menú desplegable
         <div className="dropdown">
           <div className="user">
-            <img className="user-picture" 
-            src={imageUrl}
-             alt="avatar" />
-            <button className="user-button">{name} </button>
+            <img className="user-picture" src={imageUrl} alt="avatar" />
+            <button className="user-button">{name}</button>
           </div>
           <div className="dropdown-content">
             <button
@@ -107,10 +106,7 @@ export const Header = () => {
             >
               Perfil
             </button>
-            <button
-              className="dropdown-buttons"
-              onClick={navigateDashboard}
-            >
+            <button className="dropdown-buttons" onClick={navigateDashboard}>
               Mis Canchas
             </button>
             <button
@@ -122,16 +118,29 @@ export const Header = () => {
             <button onClick={handleLogout} className="dropdown-buttons">
               Cerrar sesión
             </button>
+            {showLogoutConfirmation && (
+              <div className="modal">
+                <div className="modal-content">
+                  <p>¿Seguro que deseas cerrar sesión?</p>
+                  <button
+                    className="confirmButton"
+                    onClick={handleConfirmLogout}
+                  >
+                    Sí
+                  </button>
+                  <button className="cancelButton" onClick={handleCancelLogout}>
+                    No
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
-        // Si el usuario no es admin, mostrar el menú desplegable
         <div className="dropdown">
           <div className="user">
-            <img className="user-picture" 
-            src={imageUrl}
-             alt="avatar" />
-            <button className="user-button">{name} </button>
+            <img className="user-picture" src={imageUrl} alt="avatar" />
+            <button className="user-button">{name}</button>
           </div>
           <div className="dropdown-content">
             <button
@@ -149,10 +158,25 @@ export const Header = () => {
             <button onClick={handleLogout} className="dropdown-buttons">
               Cerrar sesión
             </button>
+            {showLogoutConfirmation && (
+              <div className="modal">
+                <div className="modal-content">
+                  <p>¿Seguro que deseas cerrar sesión?</p>
+                  <button
+                    className="confirmButton"
+                    onClick={handleConfirmLogout}
+                  >
+                    Sí
+                  </button>
+                  <button className="cancelButton" onClick={handleCancelLogout}>
+                    No
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
     </div>
-
   );
 };
