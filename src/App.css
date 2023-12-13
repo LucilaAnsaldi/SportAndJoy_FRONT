@@ -5,6 +5,5 @@ body {
 .dark-theme {
   background-color: #020c1a;
   color: white;
-  height: 100vh;
+  min-height: 100vh; /* Al menos la altura de la ventana gráfica */
 }
-

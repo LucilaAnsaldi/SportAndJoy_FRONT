@@ -15,6 +15,9 @@ const FieldCard = ({ field, onCardClick }) => {
     sport = "Tenis";
   }
   const { theme } = useContext(ThemeContext);
+
+  const role = localStorage.getItem("role");
+
   return (
     <div
       className={theme === "dark" ? "tarjeta-dark" : "tarjeta"}
@@ -33,6 +36,11 @@ const FieldCard = ({ field, onCardClick }) => {
           {" "}
           $ {field.price}
         </p>
+        {role === "ADMIN" && (
+          <p className={theme === "dark" ? "ubicacion-dark" : "ubicacion"}>
+            Id de Propietario: {field.userId}
+          </p>
+        )}
       </div>
     </div>
   );

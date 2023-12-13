@@ -23,4 +23,37 @@
   margin-right: 10px;
 }
 
-/* Agrega otros estilos según sea necesario */
+#crear-reserva {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+
+#crear-reserva:hover {
+  background-color: #45a049;
+}
+
+#verde {
+  background-color: #9fd6a5;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 2rem;
+  width: 6rem;
+}
+#rojo {
+  background-color: #cb6262;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-right: 4rem;
+  width: 9rem;
+  margin-bottom: 2rem;
+}

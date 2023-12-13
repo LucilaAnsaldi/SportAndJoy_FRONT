@@ -13,6 +13,11 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añade una suave sombra */
 }
 
+.body-dark {
+  background-color: #020c1a;
+  color: white;
+}
+
 .field-detail {
   display: flex;
   flex-direction: column;
@@ -132,7 +137,6 @@
   margin-bottom: 15px;
 }
 
-
 .calendar-container {
   margin-bottom: 15px;
 }
@@ -156,6 +160,84 @@
 .button-container {
   display: flex;
   justify-content: center;
+}
+
+.boton-verde {
+  background-color: #9fd6a5;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 3rem;
+  margin-top: 2rem;
+}
+.cancelar {
+  background-color: #cb6262;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 2rem;
+}
+
+.atras {
+  background-color: #adadad;
+  border: none;
+  float: left;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 3rem;
+  margin-top: 2rem;
+}
+
+.editar {
+  background-color: #9fd6a5;
+  border: none;
+  float: right;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 2rem;
+}
+
+.boton-verde {
+  background-color: #9fd6a5;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 3rem;
+  margin-top: 2rem;
+}
+.cancelar {
+  background-color: #cb6262;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 2rem;
+}
+
+.atras {
+  background-color: #adadad;
+  border: none;
+  float: left;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 3rem;
+  margin-top: 2rem;
+}
+
+.editar {
+  background-color: #9fd6a5;
+  border: none;
+  float: right;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 2rem;
 }
 
 .custom-popup {

@@ -189,13 +189,18 @@ const Reservations = () => {
           ? "Reservas de mis canchas"
           : "Mis Reservas"}
       </h1>
-      <Search onSearchChange={(e) => setSearchTerm(e.target.value)}/>
+      <Search onSearchChange={(e) => setSearchTerm(e.target.value)} />
       <div className="container">
         {Array.isArray(reservations) &&
           reservations
-            .filter((reservation) =>
-              reservation.field.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              reservation.field.location.toLowerCase().includes(searchTerm.toLowerCase())
+            .filter(
+              (reservation) =>
+                reservation.field.name
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                reservation.field.location
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
             )
             .map((reservation) => (
               <ReservationCard 
