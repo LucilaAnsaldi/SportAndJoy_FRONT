@@ -15,6 +15,7 @@ export const Fields = ({ fields }) => {
       price={field.price}
       sport={field.sport}
       lockerRoom={field.lockerRoom}
+      userId={field.userId} // Agrega esta línea
     />
   ));
 

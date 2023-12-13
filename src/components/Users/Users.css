@@ -63,3 +63,23 @@ select {
 #add-user-button:hover {
   background-color: #45a049;
 }
+
+#verde {
+  background-color: #9fd6a5;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 2rem;
+  width: 6rem;
+}
+#rojo {
+  background-color: #cb6262;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-left: 5rem;
+  width: 9rem;
+}

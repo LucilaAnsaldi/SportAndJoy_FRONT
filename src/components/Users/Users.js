@@ -37,12 +37,12 @@ const Users = () => {
   };
 
   // Renderización de los usuarios con el filtro
-  const filteredUsers = users.filter((user) =>
-    user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
 
   const handleAddUserClick = () => {
     setShowAddUserPopup(true);
@@ -61,14 +61,13 @@ const Users = () => {
       // Validar el formato del correo electrónico
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       setIsEmailValid(
-        (value.trim() === "" || emailRegex.test(value)) || !showAddUserPopup
+        value.trim() === "" || emailRegex.test(value) || !showAddUserPopup
       ); // Marcar en rojo solo si está vacío o el formato es inválido y se está editando
     } else if (name === "password") {
       setIsPasswordValid(
-        (value.length >= 6 || value.trim() === "") || !showAddUserPopup
+        value.length >= 6 || value.trim() === "" || !showAddUserPopup
       ); // Marcar en rojo solo si la longitud es inferior a 6 y se está editando
     }
-
   };
 
   useEffect(() => {
@@ -84,7 +83,7 @@ const Users = () => {
 
   const handleAddUserSubmit = async (e) => {
     e.preventDefault();
-     // Validar antes de enviar la solicitud
+    // Validar antes de enviar la solicitud
     if (!newUser.firstName.trim()) {
       setIsNameValid(false);
     }
@@ -105,10 +104,11 @@ const Users = () => {
     }
 
     if (!newUser.image) {
-      console.error("No se proporcionó una imagen, se usará la imagen por defecto.");
+      console.error(
+        "No se proporcionó una imagen, se usará la imagen por defecto."
+      );
       newUser.image = avatarImage;
     }
-
 
     // Si alguna validación falla, no enviar la solicitud
     if (!isNameValid || !isLastnameValid || !isEmailValid || !isPasswordValid) {
@@ -127,7 +127,7 @@ const Users = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify( newUser ),
+          body: JSON.stringify(newUser),
         }
       );
 
@@ -218,7 +218,7 @@ const Users = () => {
     <>
       <Header />
       <h1>Usuarios activos</h1>
-      <Search  onSearchChange={handleSearchChange} />
+      <Search onSearchChange={handleSearchChange} />
       <button id="add-user-button" onClick={handleAddUserClick}>
         Agregar Usuario
       </button>
@@ -253,7 +253,7 @@ const Users = () => {
                 onChange={handleAddUserChange}
                 style={{ borderColor: isNameValid ? "" : "red" }}
               />
-               {!isNameValid && (
+              {!isNameValid && (
                 <div style={{ color: "red", marginTop: "5px" }}>
                   El nombre es obligatorio.
                 </div>
@@ -268,7 +268,7 @@ const Users = () => {
                 onChange={handleAddUserChange}
                 style={{ borderColor: isLastnameValid ? "" : "red" }}
               />
-               {!isLastnameValid && (
+              {!isLastnameValid && (
                 <div style={{ color: "red", marginTop: "5px" }}>
                   El apellido es obligatorio.
                 </div>
@@ -317,9 +317,13 @@ const Users = () => {
                 <option value="Owner">Owner</option>
               </select>
             </label>
-            <button type="submit">Agregar</button>
+            <button id="verde" type="submit">
+              Agregar
+            </button>
           </form>
-          <button onClick={handleAddUserCancel}>Cancelar</button>
+          <button id="rojo" onClick={handleAddUserCancel}>
+            Cancelar
+          </button>
         </div>
       )}
     </>
