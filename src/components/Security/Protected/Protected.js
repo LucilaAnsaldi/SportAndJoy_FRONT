@@ -1,12 +1,13 @@
-// import React from "react";
-// import { AuthenticationContext } from "../../../services/Authentication/authentication.context";
+import React, { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { RoleContext } from "../../../services/role.context";
 
-// export const Protected = ({ children }) => {
-//   const { user } = useContext(AuthenticationContext);
+export const Protected = ({ children }) => {
+  const { token } = useContext(RoleContext);
 
-//   if (!user) {
-//     return <Navigate to="/signin" replace />;
-//   } else {
-//     return children;
-//   }
-// };
+  if (!token) {
+    return <Navigate to="/signin" replace />;
+  } else {
+    return children;
+  }
+};
