@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./UsersCard.css";
 import avatarImage from "../../assets/images/default_avatar.jpg";
 import API_URL from "../../constants/api";
@@ -8,6 +8,17 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isLastnameValid, setIsLastnameValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+
+
+  // Añade useEffect para inicializar los estados
+  useEffect(() => {
+    setIsNameValid(true);
+    setIsLastnameValid(true);
+    setIsEmailValid(true);
+  }, []); // Asegúrate de que este sea un arreglo vacío para que solo se ejecute una vez al montar el componente
 
   const imageUrl = user.image ? user.image : avatarImage;
   let roleText;
@@ -44,6 +55,10 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
   };
 
   const handleSaveEdit = async () => {
+    if (!isNameValid || !isLastnameValid || !isEmailValid) {
+      // No permite guardar si alguna validación falla
+      return;
+    }
     try {
       const token = localStorage.getItem("token");
 
@@ -73,6 +88,18 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
+
+    // Validaciones adicionales
+    if (name === "firstName") {
+      setIsNameValid(value.trim() !== "" || !isEditing); // Marcar en rojo solo si está vacío y se está editando
+    } else if (name === "lastName") {
+      setIsLastnameValid(value.trim() !== "" || !isEditing); // Marcar en rojo solo si está vacío y se está editando
+    } else if (name === "email") {
+      setIsEmailValid(value.trim() !== "" || !isEditing);
+    // Validar el formato del correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsEmailValid((value.trim() !== "" && emailRegex.test(value)) || !isEditing);
+    }
   };
 
   const { theme } = useContext(ThemeContext);
@@ -89,12 +116,14 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
                 name="firstName"
                 value={editedUser.firstName}
                 onChange={handleInputChange}
+                style={{ borderColor: isNameValid ? "" : "red" }}
               />
               <input
                 type="text"
                 name="lastName"
                 value={editedUser.lastName}
                 onChange={handleInputChange}
+                style={{ borderColor: isLastnameValid ? "" : "red" }}
               />
             </>
           ) : (
@@ -104,12 +133,22 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
 
         <p className="email">
           {isEditing ? (
+            <>
             <input
               type="text"
               name="email"
               value={editedUser.email}
               onChange={handleInputChange}
+              style={{ borderColor: isEmailValid ? "" : "red" }}
             />
+            {!isEmailValid && (
+              <div style={{ color: "red", marginTop: "5px" }}>
+                {editedUser.email.trim() === ""
+                  ? "El correo electrónico es obligatorio."
+                  : "Formato de correo electrónico inválido."}
+              </div>
+            )}
+            </>
           ) : (
             user.email
           )}

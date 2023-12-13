@@ -176,9 +176,12 @@ const Signup = () => {
       <button className="signin-button" type="button" onClick={signUpHandler}>
         Registrarse
       </button>
-      <p onClick={buttonNavigateSignup}>
-        ¿Ya tenés una cuenta? ¡Iniciá Sesión!
-      </p>
+      <p>
+  ¿Ya tenés una cuenta?{" "}
+  <a href="#" onClick={buttonNavigateSignup}>
+  ¡Iniciá Sesión!
+  </a>
+</p>
     </div>
   );
 };

@@ -77,9 +77,36 @@ const Dashboard = () => {
         return;
       }
 
+      if (!newField.image) {
+        console.error("Ingrese una imagen.");
+        return
+      }
+
+
       // Asegúrate de que el campo 'Name' tenga un valor
       if (!newField.name) {
         console.error("Ingrese un nombre antes de enviar la solicitud.");
+        return;
+      }
+      // Asegúrate de que el campo 'location' tenga un valor
+      if (!newField.location) {
+        console.error("Ingrese una ubicación antes de enviar la solicitud.");
+        return;
+      } 
+
+      if (!newField.description) {
+        console.warn("No se proporcionó una descripción, se usará 'sin descripción'.");
+        newField.description = "sin descripción";
+      }
+
+      if (!newField.price || parseFloat(newField.price) < 0) {
+        console.error("Ingrese un precio válido antes de enviar la solicitud.");
+        return;
+      }
+
+      // Asegúrate de que el campo 'userId' tenga un valor
+      if (!selectedUserId) {
+        console.error("Seleccione un usuario antes de enviar la solicitud.");
         return;
       }
 
@@ -232,11 +259,20 @@ const Dashboard = () => {
               </button>
             </>
           )}
-          {role !== "ADMIN" && role !== "OWNER" && <Search onSearchChange={handleSearchChange}/>}
+          {role !== "ADMIN" && <Search onSearchChange={handleSearchChange}/>}
           {role === "OWNER" && (
+            <>
             <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
               Mis Canchas
             </h3>
+            <a href="https://forms.gle/eEvQKMMGp3r92jrQ8" target="_blank" rel="noopener noreferrer">
+              Solicitud para agregar cancha
+            </a>
+            <br />
+            <a href="https://forms.gle/gxes8gnC9jF3JEcG9" target="_blank" rel="noopener noreferrer">
+              Solicitud para eliminar cancha
+            </a>
+            </>
           )}
           <div className="flex-fields">
             {filteredFields.map((field) => (
@@ -262,6 +298,9 @@ const Dashboard = () => {
                   type="text"
                   name="image"
                   onChange={handleAddFieldChange}
+                  style={{
+                    borderColor: !newField.image ? "red" : "",
+                  }}
                 />
               </label>
               <label>
@@ -271,6 +310,9 @@ const Dashboard = () => {
                   name="name"
                   // value={newField.name}
                   onChange={handleAddFieldChange}
+                  style={{
+                    borderColor: !newField.name ? "red" : "",
+                  }}
                 />
               </label>
 
@@ -281,6 +323,9 @@ const Dashboard = () => {
                   name="location"
                   // value={newField.location}
                   onChange={handleAddFieldChange}
+                  style={{
+                    borderColor: !newField.location ? "red" : "",
+                  }}
                 />
               </label>
               <label>
@@ -290,6 +335,9 @@ const Dashboard = () => {
                   name="description"
                   // value={newField.description}
                   onChange={handleAddFieldChange}
+                  style={{
+                    borderColor: !newField.description ? "red" : "",
+                  }}
                 />
               </label>
               <label>
@@ -298,8 +346,11 @@ const Dashboard = () => {
                   name="sport"
                   value={newField.sport}
                   onChange={handleAddFieldChange}
+                  style={{
+                    borderColor: !newField.sport ? "red" : "",
+                  }}
                 >
-                  <option value="">Seleccionar Usuario</option>
+                  <option value="">Seleccionar un deporte</option>
                   <option value="0">Fútbol</option>
                   <option value="1">Vóley</option>
                   <option value="2">Tenis</option>
@@ -330,6 +381,9 @@ const Dashboard = () => {
                   name="price"
                   // value={newField.price}
                   onChange={handleAddFieldChange}
+                  style={{
+                    borderColor: !newField.price || parseFloat(newField.price) < 0 ? "red" : "",
+                  }}
                 />
               </label>
               <label>
@@ -338,6 +392,9 @@ const Dashboard = () => {
                   name="userId"
                   // value={selectedUserId}
                   onChange={(e) => setSelectedUserId(e.target.value)}
+                  style={{
+                    borderColor: !selectedUserId ? "red" : "",
+                  }}
                 >
                   <option value="">Seleccionar Usuario</option>
 
