@@ -140,3 +140,27 @@
 .cancelButton:hover {
   /* Estilos específicos aquí */
 }
+
+.profileName {
+  background-color: lightgray;
+}
+
+.profileName-dark {
+  background-color: #113f67;
+}
+
+.profileLastName {
+  background-color: lightgray;
+}
+
+.profileLastName-dark {
+  background-color: #113f67;
+}
+
+.profileEmail {
+  background-color: lightgray;
+}
+
+.profileEmail-dark {
+  background-color: #113f67;
+}
