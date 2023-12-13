@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { RoleContext } from "../../../services/role.context";
 
 export const Protected = ({ children }) => {
-  const { token } = useContext(RoleContext);
+  const tokeeen = localStorage.getItem("token");
 
-  if (!token) {
+  if (!tokeeen) {
     return <Navigate to="/signin" replace />;
   } else {
     return children;
