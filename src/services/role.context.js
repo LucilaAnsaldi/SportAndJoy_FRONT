@@ -31,10 +31,3 @@ export const RoleContextProvider = ({ children }) => {
     </RoleContext.Provider>
   );
 };
-
-//observaciones: todo bien. pero llegás a recargar la página y el rol se pierde.
-
-// Roles:
-// ADMIN
-// OWNER
-// PLAYER

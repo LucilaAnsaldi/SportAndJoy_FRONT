@@ -516,10 +516,28 @@ const FieldDetail = (props) => {
                 </button>
               )}
               {showDeleteConfirmation && (
-                <div className={theme === "dark" ? "popup-dark" : "popup"}>
+                <div
+                  className={
+                    theme === "dark" ? "deletePopup-dark" : "deletePopup"
+                  }
+                >
                   <p>¿Seguro que quieres eliminar?</p>
-                  <button onClick={handleConfirmDeleteField}>Sí</button>
-                  <button onClick={handleCancelDeleteField}>No</button>
+                  <button
+                    className={
+                      theme === "dark" ? "confirmButton-dark" : "confirmButton"
+                    }
+                    onClick={handleConfirmDeleteField}
+                  >
+                    Sí
+                  </button>
+                  <button
+                    className={
+                      theme === "dark" ? "cancelButton-dark" : "cancelButton"
+                    }
+                    onClick={handleCancelDeleteField}
+                  >
+                    No
+                  </button>
                 </div>
               )}
               {role === "PLAYER" && (

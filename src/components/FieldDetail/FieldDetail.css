@@ -11,6 +11,7 @@
   border: 1px solid #ccc; /* Añade un borde */
   border-radius: 10px; /* Añade esquinas redondeadas */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añade una suave sombra */
+  transition: transform 0.3s ease-in-out;
 }
 
 .body-dark {
@@ -32,6 +33,7 @@
   border: 1px solid #ccc; /* Añade un borde */
   border-radius: 10px; /* Añade esquinas redondeadas */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añade una suave sombra */
+  transition: transform 0.3s ease-in-out;
 }
 
 .field-image {
@@ -65,28 +67,76 @@
   margin-top: 10px;
 }
 
-/* .popup {
+.deletePopup {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
+  background-color: #eaf6f6;
   border: 1px solid #ccc;
   padding: 20px;
   z-index: 1000;
   text-align: center;
-} */
+  border-radius: 8px;
+  text-align: center;
+  color: black;
+}
 
-.popup-dark {
+.confirmButton {
+  align-items: center;
+  background-color: lightgreen;
+  color: #303030;
+  border: none;
+  border-radius: 5px;
+  padding: 5%;
+  width: 25%;
+  margin: 10%;
+  cursor: pointer;
+}
+
+.confirmButton:hover {
+  /* Estilos específicos aquí */
+  background-color: #2980b9;
+}
+
+.confirmButton-dark:hover {
+  /* Estilos específicos aquí */
+  background-color: #2980b9;
+}
+
+.cancelButton {
+  align-items: center;
+  background-color: lightcoral;
+  color: #303030;
+  border: none;
+  border-radius: 5px;
+  padding: 5%;
+  width: 25%;
+  margin: 10%;
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  /* Estilos específicos aquí */
+  background-color: #2980b9;
+}
+
+.cancelButton-dark:hover {
+  /* Estilos específicos aquí */
+  background-color: #2980b9;
+}
+
+.deletePopup-dark {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #020c1a;
   border: 1px solid #ccc;
   padding: 20px;
   z-index: 1000;
   text-align: center;
+  background: #020c1a;
+  border-radius: 8px;
 }
 
 .button-container {
@@ -111,10 +161,6 @@
 
 .accept:disabled {
   background-color: #a1a0a0;
-}
-
-.field-detail:hover {
-  transform: scale(1);
 }
 
 /* cambios en el pop up tema claro */
