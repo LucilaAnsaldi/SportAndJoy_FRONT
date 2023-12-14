@@ -8,6 +8,7 @@ import NotFound from "../NotFound/NotFound";
 import API_URL from "../../constants/api";
 import { Button } from "react-bootstrap";
 import { ThemeContext } from "../../services/theme.context";
+import nopermisos from "../../assets/images/no-permisos.png";
 
 const AdminView = () => {
   const { role } = useContext(RoleContext);
@@ -23,7 +24,7 @@ const AdminView = () => {
     navigate("/reservations");
   };
   const buttonNavigateFields = () => {
-    navigate("/allFields");
+    navigate("/dashboard");
   };
 
   const handleDownloadPdf1 = () => {
@@ -101,6 +102,10 @@ const AdminView = () => {
         console.error("Error al realizar la solicitud:", error)
       );
   }
+
+  const navigatedashboard = () => {
+    navigate("/dashboard");
+  };
 
   if (role === "ADMIN") {
     return (
@@ -199,7 +204,17 @@ const AdminView = () => {
       </>
     );
   } else {
-    return <h1>No tenés permisos suficientes para ver esta página...</h1>;
+    return (
+      <>
+        <img
+          src={nopermisos}
+          alt="no tenés permisos para acceder a esta página"
+        ></img>
+        <button id="volver" onClick={navigatedashboard}>
+          Ir a dashboard
+        </button>
+      </>
+    );
   }
 };
 

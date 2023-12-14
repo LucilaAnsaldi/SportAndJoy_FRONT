@@ -41,7 +41,6 @@ const FieldDetail = (props) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [reservationError, setReservationError] = useState(null);
 
-
   const handleReserveClick = () => {
     setShowConfirmation(true);
   };
@@ -66,7 +65,7 @@ const FieldDetail = (props) => {
         // Manejar la eliminación exitosa según sea necesario
         console.log("Campo eliminado exitosamente");
         // Redirigir a la página principal u otro lugar
-        navigate("/allFields");
+        navigate("/dashboard");
       } else {
         console.error("Error al eliminar el campo:", await response.text());
       }
@@ -101,27 +100,23 @@ const FieldDetail = (props) => {
         console.log("Reserva exitosa");
         navigate("/dashboard");
       } else if (response.status === 400) {
-      const errorMessage = await response.text();
-      console.error("Error al realizar la reserva:", errorMessage);
-      setReservationError(errorMessage);
-    } else {
-      console.error("Error al realizar la reserva:", response.statusText);
+        const errorMessage = await response.text();
+        console.error("Error al realizar la reserva:", errorMessage);
+        setReservationError(errorMessage);
+      } else {
+        console.error("Error al realizar la reserva:", response.statusText);
+        setReservationError("Error desconocido al realizar la reserva.");
+      }
+
+      setShowConfirmation(false);
+    } catch (error) {
+      console.error("Error al realizar la reserva:", error);
       setReservationError("Error desconocido al realizar la reserva.");
     }
-
-    setShowConfirmation(false);
-  } catch (error) {
-    console.error("Error al realizar la reserva:", error);
-    setReservationError("Error desconocido al realizar la reserva.");
-  }
   };
 
   const navitateDashboard = () => {
-    if (role === "ADMIN") {
-      navigate("/allFields");
-    } else {
-      navigate("/dashboard");
-    }
+    navigate("/dashboard");
   };
 
   const handleCancelReservation = () => {
@@ -547,23 +542,33 @@ const FieldDetail = (props) => {
                       }
                     />
                   </div>
-                  {selectedDate < new Date() &&(
+                  {selectedDate < new Date() && (
                     <p>Podés seleccionar una fecha a partir de hoy</p>
                   )}
                   <div className="button-container">
-                    <button className= "accept" onClick={handleConfirmReservation}
-                      disabled={selectedDate < new Date()}>
-                      Aceptar</button>
+                    <button
+                      className="accept"
+                      onClick={handleConfirmReservation}
+                      disabled={selectedDate < new Date()}
+                    >
+                      Aceptar
+                    </button>
                     <button onClick={handleCancelReservation}>Cancelar</button>
                   </div>
                 </div>
               )}
-                {reservationError && (
+              {reservationError && (
                 <div className="popup-container">
-                  <div className={`popup ${theme === "dark" ? "popup-dark" : ""} custom-popup`}>
+                  <div
+                    className={`popup ${
+                      theme === "dark" ? "popup-dark" : ""
+                    } custom-popup`}
+                  >
                     <p>Oops! Hay un problema ...</p>
                     <p>{reservationError}</p>
-                    <button onClick={() => setReservationError(null)}>Cerrar</button>
+                    <button onClick={() => setReservationError(null)}>
+                      Cerrar
+                    </button>
                   </div>
                 </div>
               )}

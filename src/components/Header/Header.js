@@ -24,6 +24,10 @@ export const Header = () => {
     navigate("/dashboard");
   };
 
+  const navigateAdminView = () => {
+    navigate("/adminView");
+  };
+
   const buttonNavigateProfile = () => {
     navigate("/profile");
   };
@@ -78,9 +82,16 @@ export const Header = () => {
 
   return (
     <div className="header">
-      <button className="title-button" onClick={navigateDashboard}>
-        Sport&Joy
-      </button>
+      {role === "ADMIN" ? (
+        <button className="title-button" onClick={navigateAdminView}>
+          Sport&Joy
+        </button>
+      ) : (
+        <button className="title-button" onClick={navigateDashboard}>
+          Sport&Joy
+        </button>
+      )}
+
       {role === "ADMIN" ? (
         <div className="user">
           <img
