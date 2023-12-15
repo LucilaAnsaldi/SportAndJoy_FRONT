@@ -7,6 +7,8 @@ import API_URL from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
 import { ThemeContext } from "../../services/theme.context";
 
+
+
 const FieldDetail = (props) => {
   const {
     name,
@@ -40,6 +42,22 @@ const FieldDetail = (props) => {
   const [fieldData, setField] = useState({});
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [reservationError, setReservationError] = useState(null);
+
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isLocationValid, setIsLocationValid] = useState(true);
+  const [isSportValid, setIsSportValid] = useState(true);
+  const [isPriceValid, setIsPriceValid] = useState(true);
+
+  useEffect(() => {
+    setIsNameValid(true);
+    setIsLocationValid(true);
+    setIsSportValid(true);
+    setIsPriceValid(true);
+  }, []);
+
+
+  
+
 
   const handleReserveClick = () => {
     setShowConfirmation(true);
@@ -132,6 +150,13 @@ const FieldDetail = (props) => {
   // Editar cancha PUT OWNER
 
   const handleSaveClickOwner = () => {
+
+    // Validaciones
+    if (!isNameValid || !isLocationValid || !isSportValid || !isPriceValid) {
+      // No permite guardar si alguna validación falla
+      return;
+    }
+
     const token = localStorage.getItem("token");
 
     fetch(`${API_URL}/api/Field/${id}/edit`, {
@@ -178,6 +203,13 @@ const FieldDetail = (props) => {
   // Editar cancha PUT ADMIN
 
   const handleSaveClickAdmin = () => {
+
+    // Validaciones
+    if (!isNameValid || !isLocationValid || !isSportValid || !isPriceValid) {
+      // No permite guardar si alguna validación falla
+      return;
+    }
+
     const token = localStorage.getItem("token");
 
     fetch(`${API_URL}/api/Field/${id}/edit-admin`, {
@@ -240,6 +272,21 @@ const FieldDetail = (props) => {
     } else if (e.target.name === "price") {
       setEditedPrice(e.target.value);
     }
+
+    const { name, value } = e.target;
+
+    // Validaciones adicionales
+    if (name === "name") {
+      setIsNameValid(value.trim() !== "" || !isEditing);
+    } else if (name === "location") {
+      setIsLocationValid(value.trim() !== "" || !isEditing);
+    } else if (name === "sport") {
+      setIsSportValid(value !== "" || !isEditing);
+    } else if (name === "price") {
+      setIsPriceValid(Number(value) > 0 || !isEditing);
+    }
+
+
   };
 
   const handleInputChangeAdmin = (e) => {
@@ -261,6 +308,19 @@ const FieldDetail = (props) => {
       setEditedPrice(e.target.value);
     } else if (e.target.name === "userId") {
       setEditedUserId(e.target.value);
+    }
+
+    const { name, value } = e.target;
+
+    // Validaciones adicionales
+    if (name === "name") {
+      setIsNameValid(value.trim() !== "" || !isEditing);
+    } else if (name === "location") {
+      setIsLocationValid(value.trim() !== "" || !isEditing);
+    } else if (name === "sport") {
+      setIsSportValid(value !== "" || !isEditing);
+    } else if (name === "price") {
+      setIsPriceValid(Number(value) > 0 || !isEditing);
     }
   };
 
@@ -341,6 +401,16 @@ const FieldDetail = (props) => {
                 value={editedImage}
                 onChange={handleInputChangeOwner}
               />
+              <label>Nombre:</label>
+              <input
+                type="text"
+                name="name"
+                value={editedName}
+                onChange={handleInputChangeOwner}
+                style={{ borderColor: isNameValid ? "" : "red" }}
+              />
+              {!isNameValid && <p style={{ color: "red" }}>Ingrese el nombre</p>}
+
 
               <label>Ubicación:</label>
               <input
@@ -348,7 +418,9 @@ const FieldDetail = (props) => {
                 name="location"
                 value={editedLocation}
                 onChange={handleInputChangeOwner}
+                style={{ borderColor: isLocationValid ? "" : "red" }}
               />
+              {!isLocationValid && <p style={{ color: "red" }}>Ingrese la ubicación</p>}
 
               <label>Descripción:</label>
               <input
@@ -363,12 +435,18 @@ const FieldDetail = (props) => {
                 name="sport"
                 value={editedSport}
                 onChange={handleInputChangeOwner}
+                style={{ borderColor: isSportValid ? "" : "red" }}
               >
                 <option value="">Seleccionar Deporte</option>
                 <option value="0">Fútbol</option>
                 <option value="1">Vóley</option>
                 <option value="2">Tenis</option>
               </select>
+              {!isSportValid && (
+              <div style={{ color: "red", marginTop: "5px" }}>
+                Seleccione un deporte.
+              </div>
+            )}
 
               <label>Vestuarios:</label>
               <input
@@ -392,7 +470,15 @@ const FieldDetail = (props) => {
                 name="price"
                 value={editedPrice}
                 onChange={handleInputChangeOwner}
+                style={{
+                  borderColor: !isPriceValid ? "red" : "",
+                }}
               />
+              {!isPriceValid && (
+              <div style={{ color: "red", marginTop: "5px" }}>
+                Ingrese un precio válido.
+              </div>
+            )}
               <div className="botones">
                 <button className="boton-verde" onClick={handleSaveClickOwner}>
                   Guardar
@@ -413,6 +499,15 @@ const FieldDetail = (props) => {
                 value={editedImage}
                 onChange={handleInputChangeAdmin}
               />
+              <label>Nombre:</label>
+              <input
+                type="text"
+                name="name"
+                value={editedName}
+                onChange={handleInputChangeAdmin}
+                style={{ borderColor: isNameValid ? "" : "red" }}
+              />
+              {!isNameValid && <p style={{ color: "red" }}>Ingrese el nombre</p>}
 
               <label>Ubicación:</label>
               <input
@@ -420,7 +515,9 @@ const FieldDetail = (props) => {
                 name="location"
                 value={editedLocation}
                 onChange={handleInputChangeAdmin}
+                style={{ borderColor: isLocationValid ? "" : "red" }}
               />
+              {!isLocationValid && <p style={{ color: "red" }}>Ingrese la ubicación</p>}
 
               <label>Descripción:</label>
               <input
@@ -435,12 +532,18 @@ const FieldDetail = (props) => {
                 name="sport"
                 value={editedSport}
                 onChange={handleInputChangeAdmin}
+                style={{ borderColor: isSportValid ? "" : "red" }}
               >
                 <option value="">Seleccionar Deporte</option>
                 <option value="0">Fútbol</option>
                 <option value="1">Vóley</option>
                 <option value="2">Tenis</option>
               </select>
+              {!isSportValid && (
+              <div style={{ color: "red", marginTop: "5px" }}>
+                Seleccione un deporte.
+              </div>
+            )}
 
               <label>Vestuarios:</label>
               <input
@@ -464,7 +567,15 @@ const FieldDetail = (props) => {
                 name="price"
                 value={editedPrice}
                 onChange={handleInputChangeAdmin}
+                style={{
+                  borderColor: !isPriceValid ? "red" : "",
+                }}
               />
+               {!isPriceValid && (
+              <div style={{ color: "red", marginTop: "5px" }}>
+                Ingrese un precio válido.
+              </div>
+            )}
               <div className="botones">
                 <button className="boton-verde" onClick={handleSaveClickAdmin}>
                   Guardar
@@ -478,9 +589,15 @@ const FieldDetail = (props) => {
 
           {!isEditing && (
             <div>
-              <img src={editedImage} alt={editedName} className="field-image" />
+              <img src={editedImage} className="field-image" />
               <p>
-                <strong>Ubicación: </strong> {editedLocation}
+                <strong>Nombre: </strong> 
+                {" "}
+              <span style={{ borderColor: isNameValid ? "" : "red" }}></span>{editedName}
+              </p>
+              <p>
+                <strong>Ubicación: </strong> {" "}
+              <span style={{ borderColor: isLocationValid ? "" : "red" }}></span> {editedLocation}
               </p>
               <p>
                 <strong>Descripción: </strong> {editedDescription}

@@ -9,6 +9,7 @@ import avatarImage from "../../assets/images/default_avatar.jpg";
 import { ThemeContext } from "../../services/theme.context";
 import ToggleTheme from "../toggleTheme/ToggleTheme";
 
+
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -20,18 +21,56 @@ const Profile = () => {
   const [userData, setUserData] = useState({});
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { theme } = useContext(ThemeContext);
-  const imageUrl = image ? image : avatarImage;
+
+
   const [isEmailValid, setIsEmailValid] = useState(true); // Nuevo estado
   const [isNameValid, setIsNameValid] = useState(true);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLastnameValid, setIsLastnameValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [passwordConditions, setPasswordConditions] = useState([]);
+
+
+  const imageUrl = image ? image : avatarImage;
+
 
   const handleEditClick = () => {
     setIsEditing(true);
     setShowPassword(true);
   };
+
+
+
+
+  const validatePassword = (password) => {
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+
+  const conditions = [];
+  if (password.length < 6) {
+    conditions.push("Al menos 6 caracteres");
+  }
+  if (!/\d/.test(password)) {
+    conditions.push("Al menos un número");
+  }
+  if (!/[A-Za-z]/.test(password)) {
+    conditions.push("Al menos una letra");
+  }
+  if (!/[@$!%*?&]/.test(password)) {
+    conditions.push("Al menos un carácter especial");
+  }
+
+
+  return {
+    isValid: passwordPattern.test(password) && conditions.length === 0,
+    conditions,
+  };
+};
+
+
+ 
+
 
   const handleSaveClick = () => {
     // Validaciones adicionales
@@ -40,9 +79,11 @@ const Profile = () => {
       return;
     }
 
+
     // Realiza la lógica para enviar los datos actualizados al backend
     const token = localStorage.getItem("token");
     const userId = jwtDecode(token).sub;
+
 
     fetch(`${API_URL}/api/User/${userId}/edit`, {
       method: "PUT",
@@ -78,6 +119,7 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+
   const handleInputChange = (e) => {
     if (e.target.name === "name") {
       setName(e.target.value);
@@ -94,23 +136,30 @@ const Profile = () => {
     } else if (e.target.name === "image") {
       setImage(e.target.value);
     } else if (e.target.name === "password") {
-      setPassword(e.target.value);
-      setIsPasswordValid(
-        e.target.value.length >= 6 || e.target.value.length === 0
-      );
+      const newPassword = e.target.value;
+      setPassword(newPassword);
+ 
+      const { isValid, conditions } = validatePassword(newPassword);
+      setIsPasswordValid(isValid);
+      setPasswordConditions(conditions);
     }
   };
+
 
   const handleLogout = () => {
     // Muestra el popup de confirmación
     setShowConfirmation(true);
   };
 
+
   const handleConfirmLogout = () => {
     // Limpiar el token del localStorage
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("theme");
     navigate("/signin");
   };
+
 
   useEffect(() => {
     // Obtén el userId directamente del token al iniciar sesión
@@ -119,6 +168,7 @@ const Profile = () => {
       try {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.sub;
+
 
         // Realiza la solicitud al servidor para obtener los datos del usuario
         fetch(`${API_URL}/api/User/get/${userId}`, {
@@ -146,10 +196,40 @@ const Profile = () => {
     }
   }, []); // Asegúrate de que este sea un arreglo vacío
 
+
   return (
     <>
       <Header />
       <ToggleTheme />
+      {role === "OWNER" &&  (
+            <>
+            <div
+              className="solicitud-links-container"
+            >
+              <a
+                href="https://forms.gle/eEvQKMMGp3r92jrQ8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`solicitud-link ${
+                  theme === "dark" ? "solicitud-link-dark " : ""
+                }`}
+              >
+                Solicitud para agregar cancha
+              </a>
+              <br />
+              <a
+                href="https://forms.gle/gxes8gnC9jF3JEcG9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`solicitud-link ${
+                  theme === "dark" ? "solicitud-link-dark " : ""
+                }`}
+              >
+                Solicitud para eliminar cancha
+              </a>
+            </div>
+            </>
+          )}
       <div className="perfil-container">
         <div className="perfil-header">
           <h1>Mi perfil</h1>
@@ -220,15 +300,18 @@ const Profile = () => {
                   onChange={handleInputChange}
                   style={{
                     borderColor:
-                      (!isPasswordValid || password.length < 6) && "red",
+                      !isPasswordValid ? "red" : "",
                   }}
                 />
                 {!isPasswordValid && (
-                  <div style={{ color: "red", marginTop: "5px" }}>
-                    {password.length === 0
-                      ? "La contraseña no puede estar vacía."
-                      : "La contraseña debe tener al menos 6 caracteres."}
-                  </div>
+  <div style={{ color: "red", marginTop: "5px" }}>
+    {password.length === 0 && "La contraseña no puede estar vacía."}
+    <ul>
+      {passwordConditions.map((condition, index) => (
+        <li key={index}>{condition}</li>
+      ))}
+    </ul>
+  </div>
                 )}
               </div>
               <button onClick={handleSaveClick}>Guardar</button>
@@ -340,4 +423,8 @@ const Profile = () => {
   );
 };
 
+
 export default Profile;
+
+
+
