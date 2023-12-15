@@ -9,6 +9,7 @@ import avatarImage from "../../assets/images/default_avatar.jpg";
 import { ThemeContext } from "../../services/theme.context";
 import ToggleTheme from "../toggleTheme/ToggleTheme";
 
+
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -20,7 +21,8 @@ const Profile = () => {
   const [userData, setUserData] = useState({});
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { theme } = useContext(ThemeContext);
-  const imageUrl = image ? image : avatarImage;
+
+
   const [isEmailValid, setIsEmailValid] = useState(true); // Nuevo estado
   const [isNameValid, setIsNameValid] = useState(true);
   const [password, setPassword] = useState("");
@@ -29,14 +31,21 @@ const Profile = () => {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [passwordConditions, setPasswordConditions] = useState([]);
 
+
+  const imageUrl = image ? image : avatarImage;
+
+
   const handleEditClick = () => {
     setIsEditing(true);
     setShowPassword(true);
   };
 
 
+
+
   const validatePassword = (password) => {
   const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
 
   const conditions = [];
   if (password.length < 6) {
@@ -52,13 +61,16 @@ const Profile = () => {
     conditions.push("Al menos un carácter especial");
   }
 
+
   return {
     isValid: passwordPattern.test(password) && conditions.length === 0,
     conditions,
   };
 };
 
-  
+
+ 
+
 
   const handleSaveClick = () => {
     // Validaciones adicionales
@@ -67,9 +79,11 @@ const Profile = () => {
       return;
     }
 
+
     // Realiza la lógica para enviar los datos actualizados al backend
     const token = localStorage.getItem("token");
     const userId = jwtDecode(token).sub;
+
 
     fetch(`${API_URL}/api/User/${userId}/edit`, {
       method: "PUT",
@@ -105,6 +119,7 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+
   const handleInputChange = (e) => {
     if (e.target.name === "name") {
       setName(e.target.value);
@@ -123,23 +138,28 @@ const Profile = () => {
     } else if (e.target.name === "password") {
       const newPassword = e.target.value;
       setPassword(newPassword);
-  
+ 
       const { isValid, conditions } = validatePassword(newPassword);
       setIsPasswordValid(isValid);
       setPasswordConditions(conditions);
     }
   };
 
+
   const handleLogout = () => {
     // Muestra el popup de confirmación
     setShowConfirmation(true);
   };
 
+
   const handleConfirmLogout = () => {
     // Limpiar el token del localStorage
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("theme");
     navigate("/signin");
   };
+
 
   useEffect(() => {
     // Obtén el userId directamente del token al iniciar sesión
@@ -148,6 +168,7 @@ const Profile = () => {
       try {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.sub;
+
 
         // Realiza la solicitud al servidor para obtener los datos del usuario
         fetch(`${API_URL}/api/User/get/${userId}`, {
@@ -174,6 +195,7 @@ const Profile = () => {
       }
     }
   }, []); // Asegúrate de que este sea un arreglo vacío
+
 
   return (
     <>
@@ -401,4 +423,8 @@ const Profile = () => {
   );
 };
 
+
 export default Profile;
+
+
+

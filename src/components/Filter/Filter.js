@@ -63,16 +63,14 @@ export const Filter = ({onApplyFilters}) => {
         </div>
         <div className="filter-section">
           <h3>Bar</h3>
-          <label class="switch">
+          <label>
             <input type="checkbox" name="bar" checked={bar} onChange={handleBarChange} />
-            <span class="slider"></span>
           </label>
         </div>
         <div className="filter-section">
           <h3>Vestuario</h3>
-          <label class="switch">
+          <label>
             <input type="checkbox" name="vestuario" checked={vestuario} onChange={handleVestuarioChange} />
-            <span class="slider"></span>
           </label>
         </div>
         <div className="filter-section">

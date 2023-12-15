@@ -17,6 +17,7 @@
   color: black;
 }
 
+
 .modalContent-dark {
   background: #113f67;
   padding: 20px;
@@ -24,15 +25,18 @@
   text-align: center;
 }
 
+
 .perfil-header {
   margin-top: 10px; /* Cambiar margin-bottom a margin-top */
   text-align: left; /* Cambiar el texto a la izquierda si es necesario */
 }
 
+
 .perfil-datos {
   margin-top: 10px; /* Cambiar margin-bottom a margin-top */
   display: block; /* Cambiar a bloque en lugar de flex */
 }
+
 
 .perfil-datos label {
   display: block; /* Asegurarse de que los labels sean bloques */
@@ -40,6 +44,7 @@
   margin: 5px 0; /* Cambiar margin-bottom a un margen vertical */
   margin-top: 1rem;
 }
+
 
 .perfil-datos input,
 .perfil-datos span {
@@ -49,17 +54,19 @@
   border-radius: 5px;
 }
 
+
 .editar {
   background-color: #94c3dd;
   color: #303030;
   border: none;
   border-radius: 5px;
-  padding: 5%;
-  width: 35%;
+  padding: 3%;
+  width: 50%;
   cursor: pointer;
   float: left;
   margin-top: 2rem;
 }
+
 
 .cerrarSesion {
   margin-top: 2rem;
@@ -67,14 +74,15 @@
   color: #303030;
   border: none;
   border-radius: 5px;
-  padding: 5%;
-  width: 45%;
+  padding: 3%;
+  width: 50%;
   cursor: pointer;
   float: right;
 }
 .perfil-datos button:hover {
   background-color: #217dbb;
 }
+
 
 .userpic-container {
   margin-top: 2rem;
@@ -89,6 +97,7 @@
   object-fit: cover;
 }
 
+
 .confirmButton-dark {
   align-items: center;
   background-color: lightcoral;
@@ -101,17 +110,29 @@
   cursor: pointer;
 }
 
+
 .confirmButton-dark:hover {
 }
 
+
 /* Estilos específicos para confirmButton */
 .confirmButton {
-  color: black;
+  align-items: center;
+    background-color: lightgreen;
+    color: #303030;
+    border: none;
+    border-radius: 5px;
+    padding: 5%;
+    width: 25%;
+    margin: 10%;
+    cursor: pointer;
 }
+
 
 .confirmButton:hover {
   /* Estilos específicos aquí */
 }
+
 
 /* Estilos específicos para cancelButton-dark */
 .cancelButton-dark {
@@ -125,45 +146,65 @@
   margin: 10%;
   cursor: pointer;
 
+
   /* Estilos específicos aquí */
 }
+
 
 .cancelButton-dark:hover {
   /* Estilos específicos aquí */
 }
 
+
 /* Estilos específicos para cancelButton */
 .cancelButton {
-  color: black;
+    align-items: center;
+    background-color: lightcoral;
+    color: #303030;
+    border: none;
+    border-radius: 5px;
+    padding: 5%;
+    width: 25%;
+    margin: 10%;
+    cursor: pointer;
 }
+
 
 .cancelButton:hover {
   /* Estilos específicos aquí */
 }
 
+
 .profileName {
   background-color: lightgray;
 }
+
 
 .profileName-dark {
   background-color: #113f67;
 }
 
+
 .profileLastName {
   background-color: lightgray;
 }
+
 
 .profileLastName-dark {
   background-color: #113f67;
 }
 
+
 .profileEmail {
   background-color: lightgray;
 }
 
+
 .profileEmail-dark {
   background-color: #113f67;
 }
+
+
 
 
 .solicitud-links-container {
@@ -176,6 +217,7 @@
   margin-right: auto;
   height: 50px;
 }
+
 
 .solicitud-link {
   display: block;
@@ -192,9 +234,11 @@
   text-overflow: ellipsis;
 }
 
+
 .solicitud-link:hover {
   background-color: #c0c0c0;
 }
+
 
 .solicitud-link-dark {
   display: block;
@@ -211,11 +255,14 @@
   text-overflow: ellipsis;
 }
 
+
 .profilePassword {
   background-color: lightgray;
 }
+
 
 .profilePassword-dark {
   background-color: #113f67;
   color: white;
 }
+

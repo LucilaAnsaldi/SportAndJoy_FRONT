@@ -189,113 +189,125 @@ const Reservations = () => {
 
   return (
     <>
-      <Header />
-      <h1>
-        {role === "ADMIN"
-          ? "Todas las Reservas"
-          : role === "OWNER"
-          ? "Reservas de mis canchas"
-          : "Mis Reservas"}
-      </h1>
-      <Search onSearchChange={(e) => setSearchTerm(e.target.value)} />
-      <div className="container">
-        {Array.isArray(reservations) &&
-          reservations
-            .filter(
-              (reservation) =>
-                reservation.field.name
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                reservation.field.location
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-            )
-            .map((reservation) => (
-              <ReservationCard 
-              key={reservation.id}
-              reservation={{
-              ...reservation,
-              field: {
-              ...reservation.field,
-              name: searchTerm ? highlightMatches(reservation.field.name) : reservation.field.name,
-              location: searchTerm ? highlightMatches(reservation.field.location) : reservation.field.location,
-          },
-        }}
-              />
+  <Header />
+  <h1>
+    {role === "ADMIN"
+      ? "Todas las Reservas"
+      : role === "OWNER"
+      ? "Reservas de mis canchas"
+      : "Mis Reservas"}
+  </h1>
+
+
+  <Search onSearchChange={(e) => setSearchTerm(e.target.value)} />
+
+  {role === "ADMIN" && (
+    <>
+      <button className= "create-button" onClick={handleCreateFormToggle}>Crear Reserva</button>
+
+      {showCreateForm && (
+        <form>
+          <label htmlFor="userId">ID de Usuario:</label>
+          <select
+            id="userID"
+            name="userID"
+            value={newReservation.selectedUserId}
+            onChange={(e) => setSelectedUserId(e.target.value)}
+          >
+            <option value="">Seleccionar Usuario</option>
+            {playerUsers.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.id} - {user.name}{" "}
+                {/* Ajusta según la estructura de tus datos de usuario */}
+              </option>
             ))}
-      </div>
-
-      {role === "ADMIN" && (
-        <>
-          <button onClick={handleCreateFormToggle}>Crear Reserva</button>
-
-          {showCreateForm && (
-            <form>
-              <label htmlFor="userId">ID de Usuario:</label>
-              <select
-                id="userID"
-                name="userID"
-                value={newReservation.selectedUserId}
-                onChange={(e) => setSelectedUserId(e.target.value)}
-              >
-                <option value="">Seleccionar Usuario</option>
-                {playerUsers.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.id} - {user.name}{" "}
-                    {/* Ajusta según la estructura de tus datos de usuario */}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="fieldId">ID de Cancha:</label>
-              <select id="fieldID" name="fieldID">
-                <option value={newReservation.fieldId}>
-                  Seleccionar Cancha
+          </select>
+          <label htmlFor="fieldId">ID de Cancha:</label>
+          <select id="fieldID" name="fieldID">
+            <option value={newReservation.fieldId}>
+              Seleccionar Cancha
+            </option>
+            {fields
+              .filter((field) => !field.reserved)
+              .map((field) => (
+                <option key={field.id} value={field.id}>
+                  {field.id} - {field.name}{" "}
+                  {/* Ajusta según la estructura de tus datos de cancha */}
                 </option>
-                {fields
-                  .filter((field) => !field.reserved) // Filtrar las canchas no reservadas
-                  .map((field) => (
-                    <option key={field.id} value={field.id}>
-                      {field.id} - {field.name}{" "}
-                      {/* Ajusta según la estructura de tus datos de cancha */}
-                    </option>
-                  ))}
-              </select>
-              <label htmlFor="date">Fecha:</label>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                value={newReservation.date?.toISOString().split("T")[0]}
-                onChange={(e) =>
-                  setNewReservation({
-                    ...newReservation,
-                    date: new Date(e.target.value),
-                  })
-                }
-              />{" "}
-              {newReservation.date < new Date() &&(
-                  <p>La fecha debe ser posterior al día de hoy</p>
-                )}
-                <div className="button-container">
-                  <button className= "accept" onClick={handleCreateReservation}
-                    disabled={newReservation.date < new Date()}>
-                    Crear</button>
-                  <button onClick={handleCreateFormToggle}>Cancelar</button>
-                </div>
-            </form>
+              ))}
+          </select>
+          <label htmlFor="date">Fecha:</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={newReservation.date?.toISOString().split("T")[0]}
+            onChange={(e) =>
+              setNewReservation({
+                ...newReservation,
+                date: new Date(e.target.value),
+              })
+            }
+          />{" "}
+          {newReservation.date < new Date() && (
+            <p>La fecha debe ser posterior al día de hoy</p>
           )}
-          {reservationError && (
-            <div className="popup-container">
-              <div className={`popup ${theme === "dark" ? "popup-dark" : ""} custom-popup`}>
-                <p>Oops! Hay un problema ...</p>
-                <p>{reservationError}</p>
-                <button onClick={() => setReservationError(null)}>Cerrar</button>
-              </div>
-            </div>
-          )}
-        </>
+          <div className="button-container">
+            <button
+              className="accept"
+              onClick={handleCreateReservation}
+              disabled={newReservation.date < new Date()}
+            >
+              Crear
+            </button>
+            <button onClick={handleCreateFormToggle}>Cancelar</button>
+          </div>
+        </form>
+      )}
+      {reservationError && (
+        <div className="popup-container">
+          <div
+            className={`popup ${
+              theme === "dark" ? "popup-dark" : ""
+            } custom-popup`}
+          >
+            <p>Oops! Hay un problema ...</p>
+            <p>{reservationError}</p>
+            <button onClick={() => setReservationError(null)}>Cerrar</button>
+          </div>
+        </div>
       )}
     </>
+  )}
+
+  <div className="container">
+    {Array.isArray(reservations) &&
+      reservations
+        .filter(
+          (reservation) =>
+            reservation.field.name
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()) ||
+            reservation.field.location
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+        )
+        .map((reservation) => (
+          <ReservationCard
+            key={reservation.id}
+            reservation={{
+              ...reservation,
+              field: {
+                ...reservation.field,
+                name: searchTerm ? highlightMatches(reservation.field.name) : reservation.field.name,
+                location: searchTerm ? highlightMatches(reservation.field.location) : reservation.field.location,
+              },
+            }}
+          />
+        ))}
+  </div>
+</>
+
   );
 };
 

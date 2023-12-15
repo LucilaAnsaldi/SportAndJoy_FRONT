@@ -4,6 +4,7 @@ import { RoleContext } from "../../services/role.context";
 import API_URL from "../../constants/api";
 import { ThemeContext } from "../../services/theme.context";
 
+
 const ReservationCard = ({ reservation }) => {
   const { theme } = useContext(ThemeContext);
   console.log("User prop en ReservationCard:", reservation);
@@ -11,26 +12,32 @@ const ReservationCard = ({ reservation }) => {
   const [isDeleted, setIsDeleted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+
   const handleCancel = () => {
     // Mostrar el modal de confirmación
     setShowConfirmation(true);
   };
 
+
   const handleConfirmCancel = () => {
     const token = localStorage.getItem("token");
+
 
     if (!token) {
       console.error("Token no encontrado.");
       return;
     }
 
+
     try {
       console.log(reservation.id);
+
 
       const endpoint =
         role === "ADMIN"
           ? `${reservation.id}/delete-admin`
           : `${reservation.id}/delete`;
+
 
       fetch(`${API_URL}/api/Reservation/${endpoint}`, {
         method: "DELETE",
@@ -54,10 +61,12 @@ const ReservationCard = ({ reservation }) => {
     }
   };
 
+
   // Si la reserva ha sido eliminada, no renderiza la tarjeta
   if (isDeleted) {
     return null;
   }
+
 
   return (
     <div
@@ -80,6 +89,7 @@ const ReservationCard = ({ reservation }) => {
           Cancelar
         </button>
       )}
+
 
       {showConfirmation && (
         <div className="modal">
@@ -111,5 +121,6 @@ const ReservationCard = ({ reservation }) => {
     </div>
   );
 };
+
 
 export default ReservationCard;

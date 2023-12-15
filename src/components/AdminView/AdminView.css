@@ -1,25 +1,13 @@
-/* .bpdy {
-  margin-top: 3rem;
-  padding: 0;
-  width: 18%;
-  display: block; 
-  max-width: none;
-  margin: 0 auto; 
-  border: none;
-  background-color: transparent;
-  box-shadow: none;
-} */
-
 .body-dark {
   background-color: #020c1a;
   color: white;
 }
 
+
 .users-button {
   position: absolute;
-  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
-  margin-left: 25%; /* Puedes ajustar este valor según sea necesario */
-  background-color: #04aa6d; /* Green */
+  margin-top: 5%;
+  margin-left: 5%;
   border: none;
   color: white;
   padding: 20px 60px;
@@ -29,14 +17,13 @@
   transition-duration: 0.4s;
   cursor: pointer;
   position: center;
-}
-
-.users-button {
   background-color: white;
   color: black;
   border: 4px solid #f44336;
   border-radius: 8px;
+  margin-bottom: 2rem;
 }
+
 
 .users-button:hover {
   background-color: #f44336;
@@ -44,9 +31,8 @@
 }
 .users-button-dark {
   position: absolute;
-  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
-  margin-left: 25%; /* Puedes ajustar este valor según sea necesario */
-  background-color: #113f67; /* Green */
+  margin-top: 5%;
+  margin-left: 5%;
   border: none;
   color: #113f67;
   padding: 20px 60px;
@@ -56,25 +42,23 @@
   transition-duration: 0.4s;
   cursor: pointer;
   position: center;
-}
-
-.users-button-dark {
   background-color: #113f67;
   color: black;
   border: 4px solid lightskyblue;
   border-radius: 8px;
 }
+
 
 .users-button-dark:hover {
   background-color: lightskyblue;
   color: white;
 }
 
-.reservations-button {
-  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
-  margin-left: 60%; /* Puedes ajustar este valor según sea necesario */
 
-  background-color: #04aa6d; /* Green */
+.reservations-button {
+  position: absolute;
+  margin-top: 5%;
+  margin-left: 40%;
   border: none;
   color: white;
   padding: 20px 60px;
@@ -84,25 +68,23 @@
   transition-duration: 0.4s;
   cursor: pointer;
   position: center;
-}
-
-.reservations-button {
   background-color: white;
   color: black;
   border: 4px solid #f44336;
   border-radius: 8px;
 }
+
 
 .reservations-button:hover {
   background-color: #f44336;
   color: white;
 }
 
-.reservations-button-dark {
-  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
-  margin-left: 60%; /* Puedes ajustar este valor según sea necesario */
 
-  background-color: #04aa6d; /* Green */
+.reservations-button-dark {
+  position: absolute;
+  margin-top: 5%;
+  margin-left: 40%;
   border: none;
   color: #113f67;
   padding: 20px 60px;
@@ -112,26 +94,24 @@
   transition-duration: 0.4s;
   cursor: pointer;
   position: center;
-}
-
-.reservations-button-dark {
   background-color: #113f67;
   color: black;
   border: 4px solid lightskyblue;
   border-radius: 8px;
 }
+
 
 .reservations-button-dark:hover {
   background-color: lightskyblue;
   color: white;
 }
 
+
 .allFields-button {
-  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
-  margin-left: 35%; /* Puedes ajustar este valor según sea necesario */
-  background-color: #04aa6d; /* Green */
+  margin-top: 5%;
+  margin-left: 70%;
+  background-color: white;
   border: none;
-  color: white;
   padding: 20px 60px;
   text-align: center;
   text-decoration: none;
@@ -139,24 +119,22 @@
   transition-duration: 0.4s;
   cursor: pointer;
   position: center;
-}
-
-.allFields-button {
-  background-color: white;
-  color: black;
   border: 4px solid #f44336;
   border-radius: 8px;
+  color: black;
 }
+
 
 .allFields-button:hover {
   background-color: #f44336;
   color: white;
 }
 
+
 .allFields-button-dark {
-  margin-top: 5%; /* Puedes ajustar este valor según sea necesario */
-  margin-left: 35%; /* Puedes ajustar este valor según sea necesario */
-  background-color: #04aa6d; /* Green */
+  margin-top: 5%;
+  margin-left: 70%;
+  background-color: #113f67;
   border: none;
   color: #113f67;
   padding: 20px 60px;
@@ -166,21 +144,20 @@
   transition-duration: 0.4s;
   cursor: pointer;
   position: center;
-}
-
-.allFields-button-dark {
-  background-color: #113f67;
-  color: black;
   border: 4px solid lightskyblue;
   border-radius: 8px;
+  color: black;
 }
+
 
 .allFields-button-dark:hover {
   background-color: lightskyblue;
   color: white;
 }
 
+
 /* --------------- section */
+
 
 .section {
   max-width: 800px;
@@ -192,6 +169,7 @@
   border-radius: 10px;
   border: 4px solid #f44336;
 }
+
 
 .section-dark {
   background-color: #113f67;
@@ -205,22 +183,27 @@
   text-align: center;
 }
 
+
 h1 {
   font-size: 200%;
 }
+
 
 h3 {
   margin-top: 20px;
   font-weight: 500;
 }
 
+
 .textos {
   color: black;
 }
 
+
 .textos-dark {
   color: rgb(225, 223, 223);
 }
+
 
 .pdf {
   background-color: #9f9e9e;
@@ -233,6 +216,7 @@ h3 {
   transition: 0.3s;
 }
 
+
 .pdf-dark {
   background-color: #020c1a;
   color: white;
@@ -244,14 +228,17 @@ h3 {
   transition: 0.3s;
 }
 
+
 .pdf:hover {
   background-color: #f44336;
 }
+
 
 .pdf-dark:hover {
   background-color: lightskyblue;
   color: black;
 }
+
 
 #volver {
   border: none;
@@ -262,3 +249,6 @@ h3 {
   background-color: transparent;
   color: blue;
 }
+
+
+
