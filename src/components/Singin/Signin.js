@@ -141,11 +141,7 @@ const Signin = () => {
   // navigate("/dashboard");
 
   return (
-    <div
-      className={
-        theme === "dark" ? "signin-container-dark" : "signin-container"
-      }
-    >
+    <div className="signin-container">
       <h2>Ingresá a tu cuenta</h2>
       <div className="input-container">
         <label className="label">Mail</label>

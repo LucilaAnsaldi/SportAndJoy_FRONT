@@ -45,6 +45,7 @@
   padding: 5%;
   border: 1px solid #ccc;
   border-radius: 5px;
+  height: fit-content;
 }
 
 .add-field-popup-dark {
