@@ -27,11 +27,38 @@ const Profile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLastnameValid, setIsLastnameValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [passwordConditions, setPasswordConditions] = useState([]);
 
   const handleEditClick = () => {
     setIsEditing(true);
     setShowPassword(true);
   };
+
+
+  const validatePassword = (password) => {
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+  const conditions = [];
+  if (password.length < 6) {
+    conditions.push("Al menos 6 caracteres");
+  }
+  if (!/\d/.test(password)) {
+    conditions.push("Al menos un número");
+  }
+  if (!/[A-Za-z]/.test(password)) {
+    conditions.push("Al menos una letra");
+  }
+  if (!/[@$!%*?&]/.test(password)) {
+    conditions.push("Al menos un carácter especial");
+  }
+
+  return {
+    isValid: passwordPattern.test(password) && conditions.length === 0,
+    conditions,
+  };
+};
+
+  
 
   const handleSaveClick = () => {
     // Validaciones adicionales
@@ -94,10 +121,12 @@ const Profile = () => {
     } else if (e.target.name === "image") {
       setImage(e.target.value);
     } else if (e.target.name === "password") {
-      setPassword(e.target.value);
-      setIsPasswordValid(
-        e.target.value.length >= 6 || e.target.value.length === 0
-      );
+      const newPassword = e.target.value;
+      setPassword(newPassword);
+  
+      const { isValid, conditions } = validatePassword(newPassword);
+      setIsPasswordValid(isValid);
+      setPasswordConditions(conditions);
     }
   };
 
@@ -147,146 +176,38 @@ const Profile = () => {
   }, []); // Asegúrate de que este sea un arreglo vacío
 
   return (
-    // <>
-    //   <Header />
-    //   <ToggleTheme />
-    //   <div className="perfil-container">
-    //     <div className="perfil-header">
-    //       <h1>Mi perfil</h1>
-    //     </div>
-    //     <div className="perfil-datos">
-    //       {isEditing ? (
-    //         <div>
-    //           <div>
-    //             <label>Cambia tu foto de perfil:</label>
-    //             <input
-    //               type="text"
-    //               name="image"
-    //               value={imageUrl}
-    //               onChange={handleInputChange}
-    //             />
-    //           </div>
-    //           <div>
-    //             <label>Nombre:</label>
-    //             <input
-    //               type="text"
-    //               name="name"
-    //               value={name}
-    //               onChange={handleInputChange}
-    //               style={{ borderColor: isNameValid ? "" : "red" }}
-    //             />
-    //              {!isNameValid && (
-    //             <div style={{ color: "red", marginTop: "5px" }}>
-    //               El nombre no puede estar vacío.
-    //             </div>
-    //           )}
-    //           </div>
-    //           <div>
-    //             <label>Apellido:</label>
-    //             <input
-    //               type="text"
-    //               name="lastname"
-    //               value={lastname}
-    //               onChange={handleInputChange}
-    //               style={{ borderColor: isLastnameValid ? "" : "red" }}
-    //             />
-    //             {!isLastnameValid && (
-    //             <div style={{ color: "red", marginTop: "5px" }}>
-    //               El apellido no puede estar vacío.
-    //             </div>
-    //           )}
-    //           </div>
-    //           <div>
-    //             <label>Email:</label>
-    //             <input
-    //               type="email"
-    //               name="email"
-    //               value={email}
-    //               onChange={handleInputChange}
-    //               style={{ borderColor: isEmailValid ? "" : "red" }}
-    //             />
-    //             {!isEmailValid && (
-    //               <div style={{ color: "red", marginTop: "5px" }}>
-    //                 Formato de correo electrónico inválido.
-    //               </div>
-    //             )}
-    //           </div>
-
-    //           <button onClick={handleSaveClick}>Guardar</button>
-    //         </div>
-    //       ) : (
-    //         <div>
-    //           <div>
-    //             <div className="userpic-container">
-    //               <img
-    //                 className="userpic"
-    //                 src={imageUrl}
-    //                 alt="foto del usuario"
-    //               />
-    //             </div>
-    //           </div>
-    //           <div>
-    //             <label>Nombre:</label>
-    //             <span>{name}</span>
-    //           </div>
-    //           <div>
-    //             <label>Apellido:</label>
-    //             <span>{lastname}</span>
-    //           </div>
-    //           <div>
-    //             <label>Email:</label>
-    //             <span>{email}</span>
-    //           </div>
-    //           <button className="editar" onClick={handleEditClick}>
-    //             Editar
-    //           </button>
-    //           <>
-    //             <button
-    //               className="cerrarSesion"
-    //               onClick={() => setShowConfirmation(true)}
-    //             >
-    //               Cerrar sesión
-    //             </button>
-    //             {showConfirmation && (
-    //               <div className="modal">
-    //                 <div
-    //                   className={
-    //                     theme === "dark" ? "modalContent-dark" : "modalContent"
-    //                   }
-    //                 >
-    //                   <p>¿Estás seguro que deseas salir?</p>
-    //                   <button
-    //                     className={
-    //                       theme === "dark"
-    //                         ? "confirmButton-dark"
-    //                         : "confirmButton"
-    //                     }
-    //                     onClick={handleConfirmLogout}
-    //                   >
-    //                     Sí
-    //                   </button>
-    //                   <button
-    //                     className={
-    //                       theme === "dark"
-    //                         ? "cancelButton-dark"
-    //                         : "cancelButton"
-    //                     }
-    //                     onClick={() => setShowConfirmation(false)}
-    //                   >
-    //                     No
-    //                   </button>{" "}
-    //                 </div>
-    //               </div>
-    //             )}
-    //           </>
-    //         </div>
-    //       )}
-    //     </div>
-    //   </div>
-    // </>
     <>
       <Header />
       <ToggleTheme />
+      {role === "OWNER" &&  (
+            <>
+            <div
+              className="solicitud-links-container"
+            >
+              <a
+                href="https://forms.gle/eEvQKMMGp3r92jrQ8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`solicitud-link ${
+                  theme === "dark" ? "solicitud-link-dark " : ""
+                }`}
+              >
+                Solicitud para agregar cancha
+              </a>
+              <br />
+              <a
+                href="https://forms.gle/gxes8gnC9jF3JEcG9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`solicitud-link ${
+                  theme === "dark" ? "solicitud-link-dark " : ""
+                }`}
+              >
+                Solicitud para eliminar cancha
+              </a>
+            </div>
+            </>
+          )}
       <div className="perfil-container">
         <div className="perfil-header">
           <h1>Mi perfil</h1>
@@ -357,15 +278,18 @@ const Profile = () => {
                   onChange={handleInputChange}
                   style={{
                     borderColor:
-                      (!isPasswordValid || password.length < 6) && "red",
+                      !isPasswordValid ? "red" : "",
                   }}
                 />
                 {!isPasswordValid && (
-                  <div style={{ color: "red", marginTop: "5px" }}>
-                    {password.length === 0
-                      ? "La contraseña no puede estar vacía."
-                      : "La contraseña debe tener al menos 6 caracteres."}
-                  </div>
+  <div style={{ color: "red", marginTop: "5px" }}>
+    {password.length === 0 && "La contraseña no puede estar vacía."}
+    <ul>
+      {passwordConditions.map((condition, index) => (
+        <li key={index}>{condition}</li>
+      ))}
+    </ul>
+  </div>
                 )}
               </div>
               <button onClick={handleSaveClick}>Guardar</button>

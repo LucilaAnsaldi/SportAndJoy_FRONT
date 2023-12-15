@@ -18,6 +18,7 @@ const Users = () => {
   const [isLastnameValid, setIsLastnameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
+  // const [isImageValid, setIsImageValid] = useState(true);
 
   const [newUser, setNewUser] = useState({
     image: null,
@@ -27,6 +28,7 @@ const Users = () => {
     password: "",
     role: "PLAYER",
   });
+
 
   const handleUpdateUser = (updatedUser) => {
     setEditedUser(updatedUser);
@@ -67,6 +69,8 @@ const Users = () => {
       setIsPasswordValid(
         value.length >= 6 || value.trim() === "" || !showAddUserPopup
       ); // Marcar en rojo solo si la longitud es inferior a 6 y se está editando
+    // } else if (name === "image") {
+    //   setIsImageValid(value.trim() !== "" || !showAddUserPopup);
     }
   };
 
@@ -84,36 +88,33 @@ const Users = () => {
   const handleAddUserSubmit = async (e) => {
     e.preventDefault();
     // Validar antes de enviar la solicitud
-    if (!newUser.firstName.trim()) {
-      setIsNameValid(false);
-    }
+  // const imageValid = newUser.image.trim() !== "";
+  const nameValid = newUser.firstName.trim() !== "";
+  const lastnameValid = newUser.lastName.trim() !== "";
+  const emailValid =
+    newUser.email.trim() !== "" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newUser.email);
+  const passwordValid = newUser.password.trim().length >= 6;
 
-    if (!newUser.lastName.trim()) {
-      setIsLastnameValid(false);
-    }
+  // Actualizar estados de validación
+  setIsNameValid(nameValid);
+  setIsLastnameValid(lastnameValid);
+  setIsEmailValid(emailValid);
+  setIsPasswordValid(passwordValid);
+  // setIsImageValid(imageValid);
+  
 
-    // Validar el formato del correo electrónico
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!newUser.email.trim() || !emailRegex.test(newUser.email)) {
-      setIsEmailValid(false);
-    }
+  // Si alguna validación falla, no enviar la solicitud
+  if (!nameValid || !lastnameValid || !emailValid || !passwordValid) {
+    return;
+  }
 
-    // Validar la longitud de la contraseña
-    if (newUser.password.trim().length < 6) {
-      setIsPasswordValid(false);
-    }
+  if (!newUser.image) {
+    console.error(
+      "No se proporcionó una imagen, se usará la imagen por defecto."
+    );
+    newUser.image = avatarImage;
+  }
 
-    if (!newUser.image) {
-      console.error(
-        "No se proporcionó una imagen, se usará la imagen por defecto."
-      );
-      newUser.image = avatarImage;
-    }
-
-    // Si alguna validación falla, no enviar la solicitud
-    if (!isNameValid || !isLastnameValid || !isEmailValid || !isPasswordValid) {
-      return;
-    }
 
     try {
       const token = localStorage.getItem("token");
@@ -207,6 +208,7 @@ const Users = () => {
     setIsLastnameValid(true);
     setIsEmailValid(true);
     setIsPasswordValid(true);
+    setIsEmailValid(true);
 
     // Ocultar el popup
     setShowAddUserPopup(false);

@@ -20,6 +20,15 @@ const Dashboard = () => {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [ownerUsers, setOwnerUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isLocationValid, setIsLocationValid] = useState(true);
+  const [isSportValid, setIsSportValid] = useState(true);
+  const [isPriceValid, setIsPriceValid] = useState(true);
+  const [isImageValid, setIsImageValid] = useState(true);
+
+
+
   const [newField, setNewField] = useState({
     image: null,
     name: "",
@@ -61,12 +70,69 @@ const Dashboard = () => {
       ...prevField,
       [name]: type === "checkbox" ? checked : fieldValue,
     }));
+
+    // Validaciones adicionales
+    if (name === "name") {
+      setIsNameValid(value.trim() !== "");
+    } else if (name === "location") {
+      setIsLocationValid(value.trim() !== "");
+    } else if (name === "sport") {
+      setIsSportValid(value.trim() !== "");
+    } else if (name === "price") {
+      setIsPriceValid(parseFloat(value) >= 0 );
+    } else if (name === "image") {
+      setIsImageValid(value.trim() !== "");
+    }
+  };
+  
+  const handleAddFieldCancel = () => {
+    // Restablecer el formulario al estado inicial
+    setNewField({
+      image: null,
+      name: "",
+      location: "",
+      description: "",
+      sport: "",
+      lockerRoom: false,
+      bar: false,
+      price: 0,
+    });
+  
+    // Restablecer los estados de validación
+    setIsNameValid(true);
+    setIsLocationValid(true);
+    setIsSportValid(true);
+    setIsPriceValid(true);
+    setIsImageValid(true);
+  
+    // Ocultar el popup
+    setShowAddFieldPopup(false);
   };
 
   //POST FIELD
 
   const handleAddFieldSubmit = async (e) => {
     e.preventDefault();
+
+
+    // Validar antes de enviar la solicitud
+    const nameValid = newField.name.trim() !== "";
+    const imageValid = newField.image && newField.image.trim() !== "";
+    const locationValid = newField.location.trim() !== "";
+    const sportValid = newField.sport.trim() !== "";
+    const priceValid = parseFloat(newField.price) >= 0;
+
+    // Actualizar estados de validación
+    setIsNameValid(nameValid);
+    setIsLocationValid(locationValid);
+    setIsSportValid(sportValid);
+    setIsPriceValid(priceValid);
+    setIsImageValid(imageValid);
+
+    // Si alguna validación falla, no enviar la solicitud
+    if (!nameValid || !locationValid || !sportValid || !priceValid || !imageValid) {
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -105,11 +171,7 @@ const Dashboard = () => {
         return;
       }
 
-      // Asegúrate de que el campo 'userId' tenga un valor
-      if (!selectedUserId) {
-        console.error("Seleccione un usuario antes de enviar la solicitud.");
-        return;
-      }
+
 
       const response = await fetch(
         `${API_URL}/api/Field/create-admin?IdUser=${selectedUserId}`,
@@ -268,35 +330,23 @@ const Dashboard = () => {
         >
           {role === "ADMIN" && (
             <>
+            {role === "ADMIN" && (
+  <>
+    <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+      Todas las Canchas
+    </h3>
+  </>
+)}
               <Search onSearchChange={handleSearchChange} />
               <button id="add-field-button" onClick={handleAddFieldClick}>
                 Agregar Cancha
               </button>
             </>
           )}
-          {role !== "ADMIN" && <Search onSearchChange={handleSearchChange} />}
-          {role === "OWNER" && (
-            <>
-              <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
+          {role === "OWNER" && ( <> <h3 className={theme === "dark" ? "textos-dark" : "textos"}>
                 Mis Canchas
-              </h3>
-              <a
-                href="https://forms.gle/eEvQKMMGp3r92jrQ8"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Solicitud para agregar cancha
-              </a>
-              <br />
-              <a
-                href="https://forms.gle/gxes8gnC9jF3JEcG9"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Solicitud para eliminar cancha
-              </a>
-            </>
-          )}
+              </h3> </>) }
+          {role !== "ADMIN" && <Search onSearchChange={handleSearchChange} />}
           <div className="flex-fields">
             {filteredFields.map((field) => (
               <FieldCard
@@ -326,7 +376,7 @@ const Dashboard = () => {
                   name="image"
                   onChange={handleAddFieldChange}
                   style={{
-                    borderColor: !newField.image ? "red" : "",
+                    borderColor: !newField.image && !isImageValid ? "red" : "",
                   }}
                 />
               </label>
@@ -337,9 +387,14 @@ const Dashboard = () => {
                   name="name"
                   onChange={handleAddFieldChange}
                   style={{
-                    borderColor: !newField.name ? "red" : "",
+                    borderColor:  !newField.name && !isNameValid ? "red" : "",
                   }}
                 />
+                {!isNameValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  El nombre es obligatorio.
+                </div>
+              )}
               </label>
 
               <label>
@@ -349,9 +404,14 @@ const Dashboard = () => {
                   name="location"
                   onChange={handleAddFieldChange}
                   style={{
-                    borderColor: !newField.location ? "red" : "",
+                    borderColor: !newField.location && !isLocationValid ? "red" : "",
                   }}
                 />
+                {!isLocationValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  La ubicación es obligatoria.
+                </div>
+              )}
               </label>
               <label>
                 Descripción:
@@ -359,9 +419,6 @@ const Dashboard = () => {
                   type="text"
                   name="description"
                   onChange={handleAddFieldChange}
-                  style={{
-                    borderColor: !newField.description ? "red" : "",
-                  }}
                 />
               </label>
               <label>
@@ -371,7 +428,7 @@ const Dashboard = () => {
                   value={newField.sport}
                   onChange={handleAddFieldChange}
                   style={{
-                    borderColor: !newField.sport ? "red" : "",
+                    borderColor:  !newField.sport && !isSportValid ? "red" : "",
                   }}
                 >
                   <option value="">Seleccionar un deporte</option>
@@ -379,6 +436,11 @@ const Dashboard = () => {
                   <option value="1">Vóley</option>
                   <option value="2">Tenis</option>
                 </select>
+                {!isSportValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  Selecciona un deporte.
+                </div>
+              )}
               </label>
               <label>
                 Vestuarios:
@@ -403,21 +465,20 @@ const Dashboard = () => {
                   name="price"
                   onChange={handleAddFieldChange}
                   style={{
-                    borderColor:
-                      !newField.price || parseFloat(newField.price) < 0
-                        ? "red"
-                        : "",
+                    borderColor: (!newField.price || parseFloat(newField.price) < 0) && !isPriceValid ? "red" : "",
                   }}
                 />
+                {!isPriceValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  Ingresa un precio válido
+                </div>
+              )}
               </label>
               <label>
                 ID de Usuario:
                 <select
                   name="userId"
                   onChange={(e) => setSelectedUserId(e.target.value)}
-                  style={{
-                    borderColor: !selectedUserId ? "red" : "",
-                  }}
                 >
                   <option value="">Seleccionar Usuario</option>
 
@@ -434,7 +495,7 @@ const Dashboard = () => {
             </form>
             <button
               className="cancelar"
-              onClick={() => setShowAddFieldPopup(false)}
+              onClick={handleAddFieldCancel}
             >
               Cancelar
             </button>
