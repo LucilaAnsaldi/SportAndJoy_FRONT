@@ -7,6 +7,7 @@ import { RoleContext } from "../../services/role.context";
 import API_URL from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../services/theme.context";
 
 const Reservations = () => {
   const { role } = useContext(RoleContext);
@@ -17,6 +18,7 @@ const Reservations = () => {
   const [fields, setFields] = useState([]);
   const [playerUsers, setPlayerUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Nuevo estado
+  const [reservationError, setReservationError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -165,11 +167,15 @@ const Reservations = () => {
           createdReservation,
         ]);
         setShowCreateForm(false);
-      } else {
-        console.error("Error al crear la reserva:", await response.text());
+      } else if (response.status === 400) {
+        const errorMessage = "Esta cancha ya está reservada en esa fecha";
+        console.error("Error al realizar la reserva:", errorMessage);
+        setReservationError(errorMessage);
       }
     } catch (error) {
-      console.error("Error en la solicitud:", error);
+      const errorMessage = "Esta cancha ya está reservada en esa fecha";
+      console.error("Error al realizar la reserva:", error);
+      setReservationError(errorMessage);
     }
   };
   const highlightMatches = (text) => {
@@ -178,6 +184,8 @@ const Reservations = () => {
       regex.test(part) ? <mark key={index}>{part}</mark> : part
     );
   };
+
+  const { theme } = useContext(ThemeContext);
 
   return (
     <>
@@ -265,13 +273,25 @@ const Reservations = () => {
                   })
                 }
               />{" "}
-              <button type="button" onClick={handleCreateReservation}>
-                Crear
-              </button>
-              <button type="button" onClick={handleCreateFormToggle}>
-                Cancelar
-              </button>
+              {newReservation.date < new Date() &&(
+                  <p>La fecha debe ser posterior al día de hoy</p>
+                )}
+                <div className="button-container">
+                  <button className= "accept" onClick={handleCreateReservation}
+                    disabled={newReservation.date < new Date()}>
+                    Crear</button>
+                  <button onClick={handleCreateFormToggle}>Cancelar</button>
+                </div>
             </form>
+          )}
+          {reservationError && (
+            <div className="popup-container">
+              <div className={`popup ${theme === "dark" ? "popup-dark" : ""} custom-popup`}>
+                <p>Oops! Hay un problema ...</p>
+                <p>{reservationError}</p>
+                <button onClick={() => setReservationError(null)}>Cerrar</button>
+              </div>
+            </div>
           )}
         </>
       )}

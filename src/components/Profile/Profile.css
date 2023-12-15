@@ -10,7 +10,7 @@
   box-shadow: none;
 }
 .modalContent {
-  background: #fff;
+  background: #eaf6f6;
   padding: 20px;
   border-radius: 8px;
   text-align: center;
@@ -106,7 +106,7 @@
 
 /* Estilos específicos para confirmButton */
 .confirmButton {
-  color: green;
+  color: black;
 }
 
 .confirmButton:hover {
@@ -134,7 +134,7 @@
 
 /* Estilos específicos para cancelButton */
 .cancelButton {
-  color: red;
+  color: black;
 }
 
 .cancelButton:hover {
@@ -209,4 +209,13 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.profilePassword {
+  background-color: lightgray;
+}
+
+.profilePassword-dark {
+  background-color: #113f67;
+  color: white;
 }

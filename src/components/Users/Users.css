@@ -83,3 +83,13 @@ select {
   margin-left: 5rem;
   width: 9rem;
 }
+
+#volver {
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  width: 8rem;
+  margin-left: 40rem;
+  background-color: transparent;
+  color: blue;
+}

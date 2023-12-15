@@ -36,44 +36,55 @@ const App = () => {
     },
     {
       path: "/dashboard",
-      element:
-        role === "OWNER" || role === "PLAYER" ? (
-          <Protected>
+      element: (
+        <Protected>
           <Dashboard />
-          </Protected>
-        ) : (
-          <Navigate to="/adminView" />
-        ),
-    },
-
-    {
-      path: "/allFields",
-      element: 
-      <Protected>
-      <Dashboard />
-      </Protected>,
+        </Protected>
+      ),
     },
     {
       path: "/profile",
-      element: <Protected> 
-        <Profile />
-        </Protected>,
+      element: (
+        <Protected>
+          <Profile />
+        </Protected>
+      ),
     },
     {
       path: "/reservations",
-      element: <Protected> <Reservations /> </Protected>,
+      element: (
+        <Protected>
+          {" "}
+          <Reservations />{" "}
+        </Protected>
+      ),
     },
     {
       path: "/fieldDetail/:id",
-      element: <Protected> <FieldDetail /> </Protected>,
+      element: (
+        <Protected>
+          {" "}
+          <FieldDetail />{" "}
+        </Protected>
+      ),
     },
     {
       path: "/users",
-      element: <Protected> <Users /> </Protected>,
+      element: (
+        <Protected>
+          {" "}
+          <Users />{" "}
+        </Protected>
+      ),
     },
     {
       path: "/adminView",
-      element: <Protected> <AdminView /> </Protected>,
+      element: (
+        <Protected>
+          {" "}
+          <AdminView />{" "}
+        </Protected>
+      ),
     },
     {
       path: "*",

@@ -59,8 +59,6 @@ const ReservationCard = ({ reservation }) => {
     return null;
   }
 
-  // ...
-
   return (
     <div
       className={
@@ -77,15 +75,36 @@ const ReservationCard = ({ reservation }) => {
           Usuario: {reservation.user?.firstName} {reservation.user?.lastName}
         </p>
       </div>
-      <button onClick={handleCancel} className="cancel-button">
-        Cancelar
-      </button>
+      {(role === "ADMIN" || role === "PLAYER") && (
+        <button onClick={handleCancel} className="cancel-button">
+          Cancelar
+        </button>
+      )}
+
       {showConfirmation && (
         <div className="modal">
-          <div className="modal-content">
+          <div
+            className={
+              theme === "dark" ? "modal-content-dark" : "modal-content"
+            }
+          >
             <p>¿Está seguro que desea cancelar su reserva?</p>
-            <button onClick={handleConfirmCancel}>Sí</button>
-            <button onClick={() => setShowConfirmation(false)}>No</button>
+            <button
+              className={
+                theme === "dark" ? "confirmButton-dark" : "confirmButton"
+              }
+              onClick={handleConfirmCancel}
+            >
+              Sí
+            </button>
+            <button
+              className={
+                theme === "dark" ? "cancelButton-dark" : "cancelButton"
+              }
+              onClick={() => setShowConfirmation(false)}
+            >
+              No
+            </button>
           </div>
         </div>
       )}

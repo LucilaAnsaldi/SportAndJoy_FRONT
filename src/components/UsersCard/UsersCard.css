@@ -66,6 +66,17 @@ h3 {
   margin-left: 20%;
 }
 
+.save-button {
+  background-color: #9de73c;
+  color: #000000;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 90%;
+}
+
 .userpic {
   width: 100px;
   height: 100px;

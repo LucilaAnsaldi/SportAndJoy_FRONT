@@ -340,11 +340,15 @@ const Profile = () => {
               <div>
                 <label>Contraseña:</label>
                 <input
+                  className={
+                    theme === "dark"
+                      ? "profilePassword-dark"
+                      : "profilePassword"
+                  }
                   type="password"
                   name="password"
                   value="********" // Aquí puedes mostrar asteriscos o lo que prefieras
                   readOnly
-                  style={{ borderColor: "transparent" }}
                 />
               </div>
               <button className="editar" onClick={handleEditClick}>

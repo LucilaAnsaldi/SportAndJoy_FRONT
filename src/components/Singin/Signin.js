@@ -99,7 +99,11 @@ const Signin = () => {
 
           // No actualizamos el rol directamente aquí, ya que solo obtenemos el token
           // Redirige a la página de dashboard
-          navigate("/dashboard");
+          if (role === "ADMIN") {
+            navigate("/adminView");
+          } else {
+            navigate("/dashboard");
+          }
         } catch (jsonError) {
           console.error("Error al analizar la respuesta JSON:", jsonError);
         }

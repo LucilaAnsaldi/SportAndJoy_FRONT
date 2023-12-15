@@ -12,7 +12,6 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
   const [isLastnameValid, setIsLastnameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
 
-
   // Añade useEffect para inicializar los estados
   useEffect(() => {
     setIsNameValid(true);
@@ -96,9 +95,11 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
       setIsLastnameValid(value.trim() !== "" || !isEditing); // Marcar en rojo solo si está vacío y se está editando
     } else if (name === "email") {
       setIsEmailValid(value.trim() !== "" || !isEditing);
-    // Validar el formato del correo electrónico
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setIsEmailValid((value.trim() !== "" && emailRegex.test(value)) || !isEditing);
+      // Validar el formato del correo electrónico
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setIsEmailValid(
+        (value.trim() !== "" && emailRegex.test(value)) || !isEditing
+      );
     }
   };
 
@@ -134,20 +135,20 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
         <p className="email">
           {isEditing ? (
             <>
-            <input
-              type="text"
-              name="email"
-              value={editedUser.email}
-              onChange={handleInputChange}
-              style={{ borderColor: isEmailValid ? "" : "red" }}
-            />
-            {!isEmailValid && (
-              <div style={{ color: "red", marginTop: "5px" }}>
-                {editedUser.email.trim() === ""
-                  ? "El correo electrónico es obligatorio."
-                  : "Formato de correo electrónico inválido."}
-              </div>
-            )}
+              <input
+                type="text"
+                name="email"
+                value={editedUser.email}
+                onChange={handleInputChange}
+                style={{ borderColor: isEmailValid ? "" : "red" }}
+              />
+              {!isEmailValid && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  {editedUser.email.trim() === ""
+                    ? "El correo electrónico es obligatorio."
+                    : "Formato de correo electrónico inválido."}
+                </div>
+              )}
             </>
           ) : (
             user.email
@@ -173,7 +174,7 @@ const UsersCard = ({ user, onDeleteUser, onUpdateUser }) => {
       <div id="buttons">
         {isEditing ? (
           <>
-            <button className="edit-button" onClick={handleSaveEdit}>
+            <button className="save-button" onClick={handleSaveEdit}>
               Guardar
             </button>
             <button className="cancel-button" onClick={handleCancelEdit}>

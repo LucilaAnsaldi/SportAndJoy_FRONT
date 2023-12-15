@@ -71,26 +71,83 @@ p {
 }
 
 .modal-content {
-  background: #fff;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #eaf6f6;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+  text-align: center;
+  border-radius: 8px;
+  text-align: center;
+  color: black;
+}
+
+.modal-content-dark {
+  background: #113f67;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modalContent {
+  background: #eaf6f6;
   padding: 20px;
   border-radius: 8px;
   text-align: center;
   color: black;
 }
 
-/* Estilos para los botones del modal */
-.modal-content button {
-  margin: 0 10px;
-  padding: 8px 16px;
-  cursor: pointer;
-  background-color: #3498db; /* Color de fondo azul (puedes cambiarlo) */
-  color: #fff; /* Color del texto blanco (puedes cambiarlo) */
+.confirmButton-dark {
+  align-items: center;
+  background-color: lightcoral;
+  color: #303030;
   border: none;
-  border-radius: 4px;
-  outline: none;
+  border-radius: 5px;
+  padding: 5%;
+  width: 25%;
+  margin: 10%;
+  cursor: pointer;
 }
 
-/* Estilo para el botón "No" */
-.modal-content button:nth-child(2) {
-  background-color: #e74c3c; /* Color de fondo rojo (puedes cambiarlo) */
+.confirmButton-dark:hover {
+}
+
+/* Estilos específicos para confirmButton */
+.confirmButton {
+  color: black;
+}
+
+.confirmButton:hover {
+  /* Estilos específicos aquí */
+}
+
+/* Estilos específicos para cancelButton-dark */
+.cancelButton-dark {
+  align-items: center;
+  background-color: lightgreen;
+  color: #303030;
+  border: none;
+  border-radius: 5px;
+  padding: 5%;
+  width: 25%;
+  margin: 10%;
+  cursor: pointer;
+
+  /* Estilos específicos aquí */
+}
+
+.cancelButton-dark:hover {
+  /* Estilos específicos aquí */
+}
+
+/* Estilos específicos para cancelButton */
+.cancelButton {
+  color: black;
+}
+
+.cancelButton:hover {
+  /* Estilos específicos aquí */
 }

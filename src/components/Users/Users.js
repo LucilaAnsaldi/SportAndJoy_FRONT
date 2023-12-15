@@ -6,6 +6,8 @@ import { Search } from "../Search/Search";
 import API_URL from "../../constants/api";
 import { ThemeContext } from "../../services/theme.context";
 import avatarImage from "../../assets/images/default_avatar.jpg";
+import nopermisos from "../../assets/images/no-permisos.png";
+import { Navigate, useNavigate } from "react-router-dom";
 
 //CON FORMULARIO!
 
@@ -19,6 +21,7 @@ const Users = () => {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   // const [isImageValid, setIsImageValid] = useState(true);
+  const navigate = useNavigate();
 
   const [newUser, setNewUser] = useState({
     image: null,
@@ -216,120 +219,146 @@ const Users = () => {
 
   const { theme } = useContext(ThemeContext);
 
-  return (
-    <>
-      <Header />
-      <h1>Usuarios activos</h1>
-      <Search onSearchChange={handleSearchChange} />
-      <button id="add-user-button" onClick={handleAddUserClick}>
-        Agregar Usuario
-      </button>
-      <div className="container">
-        {filteredUsers.map((user) => (
-          <UsersCard
-            key={user.id}
-            user={user}
-            onDeleteUser={handleDeleteUser}
-            onUpdateUser={handleUpdateUser}
-          />
-        ))}
-      </div>
+  const role = localStorage.getItem("role");
 
-      {/* Popup para agregar usuario */}
-      {showAddUserPopup && (
-        <div
-          className={theme == "dark" ? "add-user-popup-dark" : "add-user-popup"}
-        >
-          <form onSubmit={handleAddUserSubmit}>
-            {/* Campos del formulario para el nuevo usuario */}
-            <label>
-              Imagen:
-              <input type="text" name="image" onChange={handleAddUserChange} />
-            </label>
-            <label>
-              Nombre:
-              <input
-                type="text"
-                name="firstName"
-                // value={newUser.firstName}
-                onChange={handleAddUserChange}
-                style={{ borderColor: isNameValid ? "" : "red" }}
-              />
-              {!isNameValid && (
-                <div style={{ color: "red", marginTop: "5px" }}>
-                  El nombre es obligatorio.
-                </div>
-              )}
-            </label>
-            <label>
-              Apellido:
-              <input
-                type="text"
-                name="lastName"
-                // value={newUser.lastName}
-                onChange={handleAddUserChange}
-                style={{ borderColor: isLastnameValid ? "" : "red" }}
-              />
-              {!isLastnameValid && (
-                <div style={{ color: "red", marginTop: "5px" }}>
-                  El apellido es obligatorio.
-                </div>
-              )}
-            </label>
-            <label>
-              Email:
-              <input
-                type="email"
-                name="email"
-                // value={newUser.email}
-                onChange={handleAddUserChange}
-                style={{ borderColor: isEmailValid ? "" : "red" }}
-              />
-              {!isEmailValid && (
-                <div style={{ color: "red", marginTop: "5px" }}>
-                  {newUser.email.trim() === ""
-                    ? "El correo electrónico es obligatorio."
-                    : "Formato de correo electrónico inválido."}
-                </div>
-              )}
-            </label>
-            <label>
-              Password:
-              <input
-                type="password"
-                name="password"
-                // value={newUser.password}
-                onChange={handleAddUserChange}
-                style={{ borderColor: isPasswordValid ? "" : "red" }}
-              />
-              {!isPasswordValid && (
-                <div style={{ color: "red", marginTop: "5px" }}>
-                  La contraseña debe tener al menos 6 caracteres.
-                </div>
-              )}
-            </label>
-            <label>
-              Tipo de Usuario:
-              <select
-                name="role"
-                // value={newUser.role}
-                onChange={handleAddUserChange}
-              >
-                <option value="Player">Player</option>
-                <option value="Owner">Owner</option>
-              </select>
-            </label>
-            <button id="verde" type="submit">
-              Agregar
-            </button>
-          </form>
-          <button id="rojo" onClick={handleAddUserCancel}>
-            Cancelar
-          </button>
+  const navigatedashboard = () => {
+    navigate("/dashboard");
+  };
+
+  if (role === "ADMIN") {
+    return (
+      <>
+        <Header />
+        <h1>Usuarios activos</h1>
+        <Search onSearchChange={handleSearchChange} />
+        <button id="add-user-button" onClick={handleAddUserClick}>
+          Agregar Usuario
+        </button>
+        <div className="container">
+          {filteredUsers.map((user) => (
+            <UsersCard
+              key={user.id}
+              user={user}
+              onDeleteUser={handleDeleteUser}
+              onUpdateUser={handleUpdateUser}
+            />
+          ))}
         </div>
-      )}
-    </>
-  );
+
+        {/* Popup para agregar usuario */}
+        {showAddUserPopup && (
+          <div
+            className={
+              theme == "dark" ? "add-user-popup-dark" : "add-user-popup"
+            }
+          >
+            <form onSubmit={handleAddUserSubmit}>
+              {/* Campos del formulario para el nuevo usuario */}
+              <label>
+                Imagen:
+                <input
+                  type="text"
+                  name="image"
+                  onChange={handleAddUserChange}
+                />
+              </label>
+              <label>
+                Nombre:
+                <input
+                  type="text"
+                  name="firstName"
+                  // value={newUser.firstName}
+                  onChange={handleAddUserChange}
+                  style={{ borderColor: isNameValid ? "" : "red" }}
+                />
+                {!isNameValid && (
+                  <div style={{ color: "red", marginTop: "5px" }}>
+                    El nombre es obligatorio.
+                  </div>
+                )}
+              </label>
+              <label>
+                Apellido:
+                <input
+                  type="text"
+                  name="lastName"
+                  // value={newUser.lastName}
+                  onChange={handleAddUserChange}
+                  style={{ borderColor: isLastnameValid ? "" : "red" }}
+                />
+                {!isLastnameValid && (
+                  <div style={{ color: "red", marginTop: "5px" }}>
+                    El apellido es obligatorio.
+                  </div>
+                )}
+              </label>
+              <label>
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  // value={newUser.email}
+                  onChange={handleAddUserChange}
+                  style={{ borderColor: isEmailValid ? "" : "red" }}
+                />
+                {!isEmailValid && (
+                  <div style={{ color: "red", marginTop: "5px" }}>
+                    {newUser.email.trim() === ""
+                      ? "El correo electrónico es obligatorio."
+                      : "Formato de correo electrónico inválido."}
+                  </div>
+                )}
+              </label>
+              <label>
+                Password:
+                <input
+                  type="password"
+                  name="password"
+                  // value={newUser.password}
+                  onChange={handleAddUserChange}
+                  style={{ borderColor: isPasswordValid ? "" : "red" }}
+                />
+                {!isPasswordValid && (
+                  <div style={{ color: "red", marginTop: "5px" }}>
+                    La contraseña debe tener al menos 6 caracteres.
+                  </div>
+                )}
+              </label>
+              <label>
+                Tipo de Usuario:
+                <select
+                  name="role"
+                  // value={newUser.role}
+                  onChange={handleAddUserChange}
+                >
+                  <option value="Player">Player</option>
+                  <option value="Owner">Owner</option>
+                </select>
+              </label>
+              <button id="verde" type="submit">
+                Agregar
+              </button>
+            </form>
+            <button id="rojo" onClick={handleAddUserCancel}>
+              Cancelar
+            </button>
+          </div>
+        )}
+      </>
+    );
+  } else {
+    return (
+      <>
+        <img
+          src={nopermisos}
+          alt="no tenés permisos para acceder a esta página"
+        ></img>
+        <button id="volver" onClick={navigatedashboard}>
+          Ir a dashboard
+        </button>
+      </>
+    );
+  }
 };
 
 export default Users;

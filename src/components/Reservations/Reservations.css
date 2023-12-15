@@ -57,3 +57,11 @@
   width: 9rem;
   margin-bottom: 2rem;
 }
+.custom-popup {
+  background-color: #ff4d4d; /* Fondo rojo */
+  border: 2px solid #000; /* Bordes negros */
+}
+
+.custom-popup p {
+  color: #000; /* Color del texto negro */
+}
